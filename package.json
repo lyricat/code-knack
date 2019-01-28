@@ -1,0 +1,52 @@
+{
+  "name": "code-knack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack --env=dev --progress --profile --colors",
+    "prod": "webpack --env=prod --progress --profile --colors"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lyricat/code-knack.git"
+  },
+  "author": "Lyric",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lyricat/code-knack/issues"
+  },
+  "homepage": "https://github.com/lyricat/code-knack#readme",
+  "dependencies": {
+    "babel-polyfill": "^6.26.0"
+  },
+  "devDependencies": {
+    "axios": "^0.18.0",
+    "babel-core": "6.26.0",
+    "babel-eslint": "7.2.3",
+    "babel-jest": "20.0.3",
+    "babel-loader": "7.1.2",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "1.6.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-runtime": "^6.26.0",
+    "clean-webpack-plugin": "0.1.16",
+    "css-loader": "^0.28.5",
+    "eslint": "4.5.0",
+    "eslint-loader": "1.9.0",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "html-webpack-plugin": "2.30.1",
+    "jest": "20.0.4",
+    "node-sass": "4.5.3",
+    "sass-loader": "6.0.6",
+    "style-loader": "^0.18.2",
+    "terser-webpack-plugin": "^1.2.1",
+    "uglifyjs-webpack-plugin": "^2.1.1",
+    "webpack": "^4.29.0",
+    "webpack-cli": "^3.2.1",
+    "webpack-dev-server": "2.7.1",
+    "webpack-merge": "4.1.0"
+  }
+}
