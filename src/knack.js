@@ -169,7 +169,7 @@ function Knack (lang) {
 }
 
 function CodeKnack (opts) {
-  this.codeKnackPath = opts.codeKnackPath || '/lib/code-knack'
+  this.codeKnackPath = '/lib/code-knack'
   this.log = function (str) {
     if (this.opts.debug) {
       console.log(str)
@@ -431,6 +431,7 @@ function CodeKnack (opts) {
       return opts.languages[lang].mode  === 'proxy'
     })
     this.langs = this.formalizeLangs(opts.enabledLanguages)
+    this.codeKnackPath = opts.codeKnackPath || this.codeKnackPath
     this.opts = opts
     // inject engines dependences
     this.inject(this.langs)
