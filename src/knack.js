@@ -1,5 +1,6 @@
 import _ from '../assets/scss/code-knack.scss';
 
+var root = root || window || {}
 
 function builtinRead(x) {
   if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
@@ -168,6 +169,11 @@ function Knack (lang) {
 }
 
 function CodeKnack (opts) {
+  this.log = function (str) {
+    if (this.opts.debug) {
+      console.log(str)
+    }
+  }
   this.cppKeywords = 'include auto if break case register continue return default do sizeof ' +
     'static else struct switch extern typedef union for goto while enum const ' +
     'volatile inline restrict asm fortran ' +
@@ -179,7 +185,7 @@ function CodeKnack (opts) {
     'thread_local throw try typeid typename using virtual xor xor_eq'
 
   this.inject = function (langs) {
-    console.log('Inject knack dependences.')
+    this.log('Inject knack dependences.')
     const self = this
     langs.forEach(async function (lang) {
       if (self.opts.languages.hasOwnProperty(lang)) {
@@ -190,18 +196,19 @@ function CodeKnack (opts) {
         }
       }
     })
-    window.KnackLoaded = true
-    console.log('Knack Loaded.')
+    root.KnackLoaded = true
+    this.log('Knack Loaded.')
   }
   
   this.injectScript = function (link, callback) {
+    var self = this
     var script = document.createElement('script')
     script.setAttribute('src', link)
     script.setAttribute('type', 'text/javascript')
     document.body.appendChild(script)
     return new Promise(function (resolve, reject) {
       script.onload = function () {
-        console.log('inject script', link)
+        self.log('inject script', link)
         resolve()
       }
     })
@@ -211,14 +218,15 @@ function CodeKnack (opts) {
     var self = this
     langs.forEach(function (lang) {
       self.engines[lang] = new Knack(lang)
+      self.log('init engine', lang)
     })
   }
 
   this.makeUI = function (eles) {
-    console.log('make UI! for default marked output')
+    this.log('make UI')
     var self = this
     eles.forEach(function (ele) {
-      var lang = self.guessLang(ele.className)
+      var lang = (self.opts.guessLang ? self.opts.guessLang : self.guessLang)(ele)
       var code = ele.innerText
       const html = '<div class="code-knack-playground" data-lang="' + lang + '">'
       + '<div class="code-knack-pane"><div class="code-knack-title">' + lang + '</div>'
@@ -231,7 +239,7 @@ function CodeKnack (opts) {
       + '</textarea>'
       + '<div class="code-knack-output"><div class="code-knack-output-title">Output</div><div class="code-knack-output-content"></div></div>'
       + '<div class="code-knack-footer"></div>'
-      + '<div class="code-knack-loading-mask">Running…</div>'
+      + '<div class="code-knack-mask"></div>'
       + '</div>'
       var parent = ele.parentNode
       parent.innerHTML = html
@@ -244,9 +252,11 @@ function CodeKnack (opts) {
 
   this.getTargetsDOM = function () {
     var eles = []
-    document.querySelectorAll('code').forEach(function (ele) {
-      if (/language-.+/.test(ele.className)) {
-        eles.push(ele)
+    document.querySelectorAll('pre').forEach(function (pre) {
+      if (pre.children.length !== 0 && pre.children[0].tagName === 'CODE') {
+        if (/language-.+/.test(ele.className)) {
+          eles.push(ele)
+        }
       }
     })
     return eles
@@ -280,12 +290,12 @@ function CodeKnack (opts) {
       if (self.engines.hasOwnProperty(cg.lang)) {
         engine.clear()
         engine.attachSource(cg.codeMirror.getValue())
-        self.setLoading(cg, true)
+        self.showMask(cg, {timeout: -1, text: 'Running...'})
         engine.eval().then(function (code) {
-          self.setLoading(cg, false)
+          self.hideMask(cg)
           outputContent.innerText = engine.getResult()
         }).catch(function (err) {
-          self.setLoading(cg, false)
+          self.hideMask(cg)
           outputContent.innerText = err
         })
         output.style.display = 'block'
@@ -294,9 +304,10 @@ function CodeKnack (opts) {
   }
 
   this.copyCode = function (cg) {
+    var self = this
     return function () {
       var text = cg.codeMirror.getValue()
-      if (window.clipboardData && window.clipboardData.setData) {
+      if (root.clipboardData && root.clipboardData.setData) {
         clipboardData.setData("Text", text)
       } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
         var textarea = document.createElement("textarea")
@@ -305,8 +316,10 @@ function CodeKnack (opts) {
         document.body.appendChild(textarea)
         textarea.select()
         try {
-            document.execCommand("copy");
+            document.execCommand("copy")
+            self.showMask(cg, {timeout: 2000, text: 'Copied to the clipboard.'})
         } catch (ex) {
+            self.showMask(cg, {timeout: 2000, text: 'Failed to copy.'})
             console.warn("Copy to clipboard failed.", ex)
         } finally {
             document.body.removeChild(textarea)
@@ -315,13 +328,24 @@ function CodeKnack (opts) {
     }
   }
 
-  this.setLoading = function (cg, val) {
-    var mask = cg.element.querySelector('.code-knack-loading-mask')
-    if (val) {
-      mask.style.display = 'flex'
-    } else {
-      mask.style.display = 'none'
+  this.showMask = function (cg, _opts) {
+    var mask = cg.element.querySelector('.code-knack-mask')
+    var opts = {
+      timeout: _opts.timeout || 3000,
+      text: _opts.text || ''
     }
+    mask.style.display = 'flex'
+    mask.innerText = opts.text
+    if (opts.timeout !== -1) {
+      setTimeout(function () {
+        mask.style.display = 'none'
+      }, opts.timeout)
+    }
+  }
+
+  this.hideMask = function (cg) {
+    var mask = cg.element.querySelector('.code-knack-mask')
+    mask.style.display = 'none'
   }
 
   this.isClike = function (lang) {
@@ -367,7 +391,7 @@ function CodeKnack (opts) {
       })
     }
     setTimeout(function () {
-      if (window.KnackLoaded) {
+      if (root.KnackLoaded) {
         _proc()
       } else {
         init()
@@ -375,8 +399,8 @@ function CodeKnack (opts) {
     }, 1000)
   }
 
-  this.guessLang = function (identify) {
-    var lang = identify.substring(9).toLowerCase()
+  this.guessLang = function (ele) {
+    var lang = ele.className.substring(9).toLowerCase()
     if (lang === 'c') {
       lang = 'cpp'
     }
@@ -414,8 +438,8 @@ function CodeKnack (opts) {
   }
 }
 
-if (window) {
-  window.CodeKnack = CodeKnack;
+if (root) {
+  root.CodeKnack = CodeKnack;
 }
 
 export default CodeKnack;

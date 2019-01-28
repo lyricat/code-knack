@@ -13,60 +13,85 @@
 </head>
 <body>
     <script>
-        var init = function () {
+
+    var getElements = function () {
+        var eles = []
+        document.querySelectorAll('pre').forEach(function (pre) {
+            if (pre.children.length !== 0 && pre.children[0].tagName === 'CODE') {
+                let ele = pre.children[0]
+                if (/language-.+/.test(ele.className)) {
+                    eles.push(ele)
+                }
+            }
+        })
+        console.log(eles)
+        return eles
+    }
+
+    var guessLang = function (ele) {
+        var lang = ele.className.substring(9).toLowerCase()
+        if (lang === 'c') {
+            lang = 'cpp'
+        }
+        console.log('guess lang', lang)
+        return lang
+    }
+    
+    var init = function () {
+        // fetch the languages
         var langs = Array.prototype.slice.call(document.querySelectorAll('code')).filter(function (x) {
             return /language-.+/.test(x.className)
         }).map(function(x) {
             return x.className.substring(9)
         })
-        var ck = new CodeKnack({
-            languages: {
-            'javascript': {
-                mode: 'browser',
-                scripts: ['/lib/codemirror/mode/javascript/javascript.js'],
-            },
-            'scheme': {
-                mode: 'browser',
-                scripts: ['/lib/codemirror/mode/scheme/scheme.js', '/lib/engines/biwascheme-min.js'],
-            },
-            'cpp': {
-                mode: 'browser',
-                scripts: ['/lib/codemirror/mode/clike/clike.js', '/lib/engines/jscpp.es5.min.js'],
-            },
-            'python': {
-                mode: 'browser',
-                scripts: ['/lib/codemirror/mode/python/python.js', '/lib/engines/skulpt.min.js', '/lib/engines/skulpt-stdlib.js'],
-            },
-            'ruby': {
-                mode: 'browser',
-                scripts: ['/lib/codemirror/mode/ruby/ruby.js', '/lib/engines/opal.js', '/lib/engines/opal-parser.js'],
-            },
-            'go': {
-                mode: 'view',
-                scripts: ['/lib/codemirror/mode/go/go.js'],
-            },
-            'rust': {
-                mode: 'view',
-                scripts: ['/lib/codemirror/addon/mode/simple.js', '/lib/codemirror/mode/rust/rust.js'],
-            },
-            'css': {
-                mode: 'view',
-                scripts: ['/lib/codemirror/mode/css/css.js'],
-            },
-            'php': {
-                mode: 'view',
-                scripts: ['/lib/codemirror/mode/xml/xml.js', '/lib/codemirror/mode/php/php.js'],
-            },
-            'swift': {
-                mode: 'proxy',
-                scripts: ['/lib/codemirror/mode/swift/swift.js'],
-            },
-            },
+        var elements = getElements()
+
+        var codeKnack = new CodeKnack({
+            elements: elements,
+            guessLang: guessLang,
             enabledLanguages: langs,
+            languages: {
+                'javascript': {
+                    mode: 'browser',
+                    scripts: ['/lib/codemirror/mode/javascript/javascript.js'],
+                },
+                'scheme': {
+                    mode: 'browser',
+                    scripts: ['/lib/codemirror/mode/scheme/scheme.js', '/lib/engines/biwascheme-min.js'],
+                },
+                'cpp': {
+                    mode: 'browser',
+                    scripts: ['/lib/codemirror/mode/clike/clike.js', '/lib/engines/jscpp.es5.min.js'],
+                },
+                'python': {
+                    mode: 'browser',
+                    scripts: ['/lib/codemirror/mode/python/python.js', '/lib/engines/skulpt.min.js', '/lib/engines/skulpt-stdlib.js'],
+                },
+                'ruby': {
+                    mode: 'browser',
+                    scripts: ['/lib/codemirror/mode/ruby/ruby.js', '/lib/engines/opal.js', '/lib/engines/opal-parser.js'],
+                },
+                'go': {
+                    mode: 'view',
+                    scripts: ['/lib/codemirror/mode/go/go.js'],
+                },
+                'rust': {
+                    mode: 'view',
+                    scripts: ['/lib/codemirror/addon/mode/simple.js', '/lib/codemirror/mode/rust/rust.js'],
+                },
+                'css': {
+                    mode: 'view',
+                    scripts: ['/lib/codemirror/mode/css/css.js'],
+                },
+                'php': {
+                    mode: 'view',
+                    scripts: ['/lib/codemirror/mode/xml/xml.js', '/lib/codemirror/mode/php/php.js'],
+                },
+            }
         })
-        ck.init()
-        }
-        window[ addEventListener ? 'addEventListener' : 'attachEvent' ]( addEventListener ? 'load' : 'onload', init )
+        codeKnack.init()
+    }
+    window[ addEventListener ? 'addEventListener' : 'attachEvent' ]( addEventListener ? 'load' : 'onload', init )
     </script>
     <div>
         <h1>A Demo page for Code-Knack</h1>
