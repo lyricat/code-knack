@@ -9,7 +9,7 @@
     <script src="/code-knack.min.js" type="application/javascript"></script>
     <script src="/lib/codemirror/codemirror.js" type="application/javascript"></script>
     
-    <title>Document</title>
+    <title>Code-Knack Demo</title>
 </head>
 <body>
     <script>
@@ -19,7 +19,7 @@
         }).map(function(x) {
             return x.className.substring(9)
         })
-        var ck = new window.CodeKnack({
+        var ck = new CodeKnack({
             languages: {
             'javascript': {
                 mode: 'browser',
@@ -69,6 +69,11 @@
         window[ addEventListener ? 'addEventListener' : 'attachEvent' ]( addEventListener ? 'load' : 'onload', init )
     </script>
     <div>
+        <h1>A Demo page for Code-Knack</h1>
+        <ul>
+            <li>Github: <a href="https://github.com/lyricat/code-knack">Code-Knack</a></li>
+            <li>Author: <a href="https://lyric.im">Lyric</a></li>
+        </ul>
         <p>C/C++</p>
         <pre><code class="language-c">
 int main() {
@@ -81,6 +86,10 @@ def foo():
     print "Hello"
 
 foo()
+        </code></pre>
+        <p>Javascript<p>
+        <pre><code class="language-javascript">
+console.log('Hello!')
         </code></pre>
     </div>
 </body>
