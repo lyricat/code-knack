@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet", href="/lib/codemirror/codemirror.css"></link>
-    <link rel="stylesheet", href="/lib/codemirror/theme/monokai.css"></link>
-    <script src="/code-knack.min.js" type="application/javascript"></script>
-    <script src="/lib/codemirror/codemirror.js" type="application/javascript"></script>
+    <link rel="stylesheet", href="./lib/codemirror/codemirror.css"></link>
+    <link rel="stylesheet", href="./lib/codemirror/theme/monokai.css"></link>
+    <script src="./code-knack.min.js" type="application/javascript"></script>
+    <script src="./lib/codemirror/codemirror.js" type="application/javascript"></script>
     
     <title>Code-Knack Demo</title>
 </head>
@@ -53,39 +53,39 @@
             languages: {
                 'javascript': {
                     mode: 'browser',
-                    scripts: ['/lib/codemirror/mode/javascript/javascript.js'],
+                    scripts: ['./lib/codemirror/mode/javascript/javascript.js'],
                 },
                 'scheme': {
                     mode: 'browser',
-                    scripts: ['/lib/codemirror/mode/scheme/scheme.js', '/lib/engines/biwascheme-min.js'],
+                    scripts: ['./lib/codemirror/mode/scheme/scheme.js', './lib/engines/biwascheme-min.js'],
                 },
                 'cpp': {
                     mode: 'browser',
-                    scripts: ['/lib/codemirror/mode/clike/clike.js', '/lib/engines/jscpp.es5.min.js'],
+                    scripts: ['./lib/codemirror/mode/clike/clike.js', './lib/engines/jscpp.es5.min.js'],
                 },
                 'python': {
                     mode: 'browser',
-                    scripts: ['/lib/codemirror/mode/python/python.js', '/lib/engines/skulpt.min.js', '/lib/engines/skulpt-stdlib.js'],
+                    scripts: ['./lib/codemirror/mode/python/python.js', './lib/engines/skulpt.min.js', './lib/engines/skulpt-stdlib.js'],
                 },
                 'ruby': {
                     mode: 'browser',
-                    scripts: ['/lib/codemirror/mode/ruby/ruby.js', '/lib/engines/opal.js', '/lib/engines/opal-parser.js'],
+                    scripts: ['./lib/codemirror/mode/ruby/ruby.js', './lib/engines/opal.js', './lib/engines/opal-parser.js'],
                 },
                 'go': {
                     mode: 'view',
-                    scripts: ['/lib/codemirror/mode/go/go.js'],
+                    scripts: ['./lib/codemirror/mode/go/go.js'],
                 },
                 'rust': {
                     mode: 'view',
-                    scripts: ['/lib/codemirror/addon/mode/simple.js', '/lib/codemirror/mode/rust/rust.js'],
+                    scripts: ['./lib/codemirror/addon/mode/simple.js', './lib/codemirror/mode/rust/rust.js'],
                 },
                 'css': {
                     mode: 'view',
-                    scripts: ['/lib/codemirror/mode/css/css.js'],
+                    scripts: ['./lib/codemirror/mode/css/css.js'],
                 },
                 'php': {
                     mode: 'view',
-                    scripts: ['/lib/codemirror/mode/xml/xml.js', '/lib/codemirror/mode/php/php.js'],
+                    scripts: ['./lib/codemirror/mode/xml/xml.js', './lib/codemirror/mode/php/php.js'],
                 },
             }
         })
