@@ -169,6 +169,7 @@ function Knack (lang) {
 }
 
 function CodeKnack (opts) {
+  this.codeKnackPath = opts.codeKnackPath || '/lib/code-knack'
   this.log = function (str) {
     if (this.opts.debug) {
       console.log(str)
@@ -231,8 +232,8 @@ function CodeKnack (opts) {
       const html = '<div class="code-knack-playground" data-lang="' + lang + '">'
       + '<div class="code-knack-pane"><div class="code-knack-title">' + lang + '</div>'
       + '<div class="code-knack-ctrl">'
-      + (self.isExeutableLang(lang)  ? '<button class="button run-button"><img src="/lib/code-knack/images/icon-play.svg"/><span>run</span></button>'  : '')
-      + '<button class="button copy-button"><img src="/lib/code-knack/images/icon-copy.svg"/><span>copy</span></button>'
+      + (self.isExeutableLang(lang)  ? '<button class="button run-button"><img src="' + self.codeKnackPath + '/images/icon-play.svg"/><span>run</span></button>'  : '')
+      + '<button class="button copy-button"><img src="' + self.codeKnackPath + '/images/icon-copy.svg"/><span>copy</span></button>'
       + '</div></div>'
       + '<textarea class="code-knack-text lang-' + escape(lang, true) + '">'
       + code
