@@ -16,7 +16,7 @@ function words(str) {
   return obj
 }
 
-function Knack (lang) {
+function Knack (lang, opts) {
   this.setup = function () {
     var self = this
     switch (lang) {
@@ -37,6 +37,7 @@ function Knack (lang) {
     this.consoleBuffer = ''
     this.lang = lang
     this.source = ''
+    this.opts = opts
   }
   this.clear = function () {
     this.source = ''
@@ -143,10 +144,11 @@ function Knack (lang) {
     return sesPromise
   }
   this.evalSwift = function (source) {
+    var self = this
     var promise = new Promise(function (resolve, reject) {
       axios({
         method: 'post',
-        url: '/code-knack/proxy/swift',
+        url: self.opts.proxyUrl,
         data: {
           code: source
         }
@@ -215,10 +217,17 @@ function CodeKnack (opts) {
     })
   }
 
+  this.getLangOpts = function (lang) {
+    if (this.opts.languages.hasOwnProperty(lang)) {
+      return this.opts.languages[lang]
+    }
+    return {}
+  }
+
   this.initEngines = function (langs) {
     var self = this
     langs.forEach(function (lang) {
-      self.engines[lang] = new Knack(lang)
+      self.engines[lang] = new Knack(lang, self.getLangOpts(lang))
       self.log('init engine', lang)
     })
   }
@@ -255,8 +264,8 @@ function CodeKnack (opts) {
     var eles = []
     document.querySelectorAll('pre').forEach(function (pre) {
       if (pre.children.length !== 0 && pre.children[0].tagName === 'CODE') {
-        if (/language-.+/.test(ele.className)) {
-          eles.push(ele)
+        if (/language-.+/.test(pre.children[0].className)) {
+          eles.push(pre.children[0])
         }
       }
     })
@@ -317,13 +326,13 @@ function CodeKnack (opts) {
         document.body.appendChild(textarea)
         textarea.select()
         try {
-            document.execCommand("copy")
-            self.showMask(cg, {timeout: 2000, text: 'Copied to the clipboard.'})
+          document.execCommand("copy")
+          self.showMask(cg, {timeout: 2000, text: 'Copied to the clipboard.'})
         } catch (ex) {
-            self.showMask(cg, {timeout: 2000, text: 'Failed to copy.'})
-            console.warn("Copy to clipboard failed.", ex)
+          self.showMask(cg, {timeout: 2000, text: 'Failed to copy.'})
+          console.warn("Copy to clipboard failed.", ex)
         } finally {
-            document.body.removeChild(textarea)
+          document.body.removeChild(textarea)
         }
       }
     }
