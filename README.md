@@ -1,6 +1,6 @@
 # Code-Knack
 
-A widget which transforms you code into a runnable editor to run code inline.
+A widget transforms you code into a runnable editor to run code inline.
 
 - Mobile compatibility
 - Allow to run code in browser or at server(implement yourself)
