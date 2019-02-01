@@ -1,11 +1,12 @@
 # Code-Knack
 
-A widget transforms you code into a runnable editor to run code inline.
+A code evaluator on your web page. Support both client implements and server implements.
 
 - Mobile compatibility
-- Allow to run code in browser or at server(implement yourself)
-- Good looking
-- Syntax highlight and editor (powered by [CodeMirror](http://codemirror.net/))
+- Allow to run code at client side or server (implement yourself)
+- Inject required script files automatically
+- Good design and theme support
+- Syntax highlight editor (powered by [CodeMirror](http://codemirror.net/))
 - Multi-languages support (powered by different projects, see table followed)
 
 ## Demo
