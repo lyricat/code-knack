@@ -2,8 +2,6 @@
 
 A code evaluator on your web page. Support both client implements and server implements.
 
-![screen record](https://github.com/lyricat/code-knack/blob/master/docs/screenrecord.gif)
-
 - Mobile compatibility
 - Allow running code at client side or server (implement yourself)
 - Inject required script files automatically
@@ -12,6 +10,8 @@ A code evaluator on your web page. Support both client implements and server imp
 - Multi-languages support (powered by different projects, see table followed)
 
 ## Demo
+
+![screen record](https://github.com/lyricat/code-knack/blob/master/docs/screenrecord.gif)
 
 - [Simple Demo](https://lyricat.github.io/code-knack/demo/)
 - [My Blog](https://lyric.im/code-knack)
