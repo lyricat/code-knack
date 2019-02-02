@@ -4,6 +4,7 @@ const CommonConfig = require('./webpack.common.js');
 const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = Merge(CommonConfig, {
+  mode: 'production',
   plugins: [
     new TerserPlugin()
   ]

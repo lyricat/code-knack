@@ -6,7 +6,6 @@ module.exports = {
     'babel-polyfill',
     './assets/scss/code-knack.scss',
     './src/knack.js',
-    'webpack-dev-server/client?http://localhost:8080'
   ],
   output: {
     path: path.join(process.cwd(), 'dist'),
@@ -31,8 +30,5 @@ module.exports = {
         loader: ['style-loader', 'css-loader', 'sass-loader']
       },
     ]
-  },
-  devServer: {
-    contentBase: './src'
   }
 }
