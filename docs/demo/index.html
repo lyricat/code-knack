@@ -10,6 +10,17 @@
     <script src="./lib/codemirror/codemirror.js" type="application/javascript"></script>
     
     <title>Code-Knack Demo</title>
+
+    <style>
+        html, body {
+            background: rgb(244, 246, 247);
+            color: rgb(40, 40, 40);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        a {
+            color:sandybrown;
+        }
+    </style>
 </head>
 <body>
     <script>
@@ -94,7 +105,7 @@
     }
     window[ addEventListener ? 'addEventListener' : 'attachEvent' ]( addEventListener ? 'load' : 'onload', init )
     </script>
-    <div>
+    <div style="margin: 0 auto; width: 660px;">
         <h1>A Demo page for Code-Knack</h1>
         <ul>
             <li>Github: <a href="https://github.com/lyricat/code-knack">Code-Knack</a></li>
@@ -102,7 +113,9 @@
         </ul>
         <p>C/C++</p>
         <pre><code class="language-c">
+#include "cstdio"
 int main() {
+    printf("Hello World\n");
     return 0;
 }
         </code></pre>
@@ -116,6 +129,18 @@ foo()
         <p>Javascript<p>
         <pre><code class="language-javascript">
 console.log('Hello!')
+        </code></pre>
+        <p>Scheme<p>
+        <pre><code class="language-scheme">
+(((lambda (f)
+    ((lambda (proc)
+       (f (lambda (arg) ((proc proc) arg))))
+     (lambda (proc)
+       (f (lambda (arg) ((proc proc) arg))))))
+  (lambda (self)
+    (lambda (ls)
+      (if (null? ls) 0 (+ 1 (self (cdr ls)))))))
+ '(a b c d e))       
         </code></pre>
     </div>
 </body>
