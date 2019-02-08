@@ -70,36 +70,41 @@ function Knack (lang, opts) {
       'ruby': this.evalRuby,
       'python': this.evalPython,
       'cpp': this.evalCpp,
-      'c': this.evalCpp,
-      'swift': this.evalSwift,
+      'c': this.evalCpp
     }
     var self = this
+    var proc = null
     this.hookConsole()
     if (procMap.hasOwnProperty(this.lang)) {
-      var proc = procMap[this.lang]
-      var promise = proc.apply(this, [this.source])
-      return new Promise(function (resolve, reject) {
-        promise.then(function (ret) {
-          self.unhookConsole()
-          if (self.consoleBuffer.length === 0) {
-            if (ret.constructor === Object && ret.toString) {
-              self.consoleBuffer += ret.toString()
-            } else {
-              self.consoleBuffer += ret
-            }
-          }
-          resolve(self.consoleBuffer)
-        }).catch(function (err) {
-          self.unhookConsole()
-          reject(err)
-        })
-      })
+      // compile and run in browser
+      proc = procMap[this.lang]
+    } else if (self.opts.mode === 'proxy' && self.opts.proxyUrl) {
+      // proxy
+      proc = self.evalProxy
     } else {
+      // unsupported and not proxied
       return new Promise(function (resolve, reject) {
         self.unhookConsole()
         resolve(self.consoleBuffer)
       })
     }
+    var promise = proc.apply(this, [this.source])
+    return new Promise(function (resolve, reject) {
+      promise.then(function (ret) {
+        self.unhookConsole()
+        if (self.consoleBuffer.length === 0) {
+          if (ret.constructor === Object && ret.toString) {
+            self.consoleBuffer += ret.toString()
+          } else {
+            self.consoleBuffer += ret
+          }
+        }
+        resolve(self.consoleBuffer)
+      }).catch(function (err) {
+        self.unhookConsole()
+        reject(err)
+      })
+    })
   }
   this.evalCpp = function (source) {
     var self = this
@@ -143,7 +148,7 @@ function Knack (lang, opts) {
     })
     return sesPromise
   }
-  this.evalSwift = function (source) {
+  this.evalProxy = function (source) {
     var self = this
     var promise = new Promise(function (resolve, reject) {
       axios({
