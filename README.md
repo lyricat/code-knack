@@ -11,6 +11,8 @@ A code evaluator on your web page. Support both client implements and server imp
 
 ## Demo
 
+![screen record](https://github.com/lyricat/code-knack/blob/master/docs/screenrecord.gif)
+
 - [Simple Demo](https://lyricat.github.io/code-knack/demo/)
 - [My Blog](https://lyric.im/code-knack)
 
