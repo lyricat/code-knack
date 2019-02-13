@@ -283,16 +283,8 @@ function CodeKnack (opts) {
         return 'text/x-csrc'
       case 'cpp':
         return 'text/x-c++src'
-      case 'java':
-        return 'text/x-java'
-      case 'csharp':
-        return 'text/x-csharp'
-      case 'objectivec':
-        return 'text/x-objectivec'
-      case 'scala':
-        return 'text/x-scala'
       default:
-        return x
+        return 'text/x-' + x
     }
   }
 
