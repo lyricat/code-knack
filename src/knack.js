@@ -283,6 +283,12 @@ function CodeKnack (opts) {
         return 'text/x-csrc'
       case 'cpp':
         return 'text/x-c++src'
+      case 'rust':
+        return 'text/x-rustsrc'
+      case 'css':
+        return 'text/css'
+      case 'scss':
+        return 'text/scss'
       default:
         return 'text/x-' + x
     }
