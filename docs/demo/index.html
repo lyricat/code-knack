@@ -99,6 +99,10 @@
                     mode: 'view',
                     scripts: ['./lib/codemirror/mode/xml/xml.js', './lib/codemirror/mode/php/php.js'],
                 },
+                'html': {
+                    mode: 'view',
+                    scripts: ['./lib/codemirror/mode/xml/xml.js', './lib/codemirror/mode/css/css.js', './lib/codemirror/mode/javascript/javascript.js', './lib/codemirror/mode/htmlmixed/htmlmixed.js'],
+                }
             }
         })
         codeKnack.init()
@@ -141,6 +145,11 @@ console.log('Hello!')
     (lambda (ls)
       (if (null? ls) 0 (+ 1 (self (cdr ls)))))))
  '(a b c d e))       
+        </code></pre>
+        <pre><code class='language-html'>
+&lt;div class=&quot;abc&quot;&gt;
+    &lt;a href=&quot;https://github.com&quot;&gt;Github&lt;/a&gt;
+&lt;/div&gt;
         </code></pre>
     </div>
 </body>

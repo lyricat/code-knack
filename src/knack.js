@@ -289,6 +289,12 @@ function CodeKnack (opts) {
         return 'text/css'
       case 'scss':
         return 'text/scss'
+      case 'html':
+        return {
+          name: "htmlmixed",
+          scriptTypes: [{matches: /\/x-handlebars-template|\/x-mustache/i,
+                         mode: null}]
+        }
       default:
         return 'text/x-' + x
     }
