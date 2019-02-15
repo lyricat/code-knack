@@ -279,6 +279,8 @@ function CodeKnack (opts) {
   
   this.getMode = function (x) {
     switch (x) {
+      case 'javascript':
+        return 'text/javascript'
       case 'c':
         return 'text/x-csrc'
       case 'cpp':
