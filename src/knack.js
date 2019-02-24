@@ -179,7 +179,9 @@ function CodeKnack (opts) {
   this.codeKnackPath = '/lib/code-knack'
   this.log = function (str) {
     if (this.opts.debug) {
-      console.log(str)
+      let args = [str]
+      args = args.concat(Array.prototype.slice.call(arguments, 1))
+      console.log.apply(console, args)
     }
   }
   this.cppKeywords = 'include auto if break case register continue return default do sizeof ' +
