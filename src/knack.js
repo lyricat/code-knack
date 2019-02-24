@@ -25,11 +25,19 @@ function Knack (lang, opts) {
         Opal.load('opal-parser')
         break
       case 'python':
-        this.Sk = Sk
-        this.Sk.configure({output: function (text) { self.onSkOutput(text) }, read: builtinRead})
+        try {
+          this.Sk = Sk
+          this.Sk.configure({output: function (text) { self.onSkOutput(text) }, read: builtinRead})
+        } catch (e) {
+          console.log('failed to setup Sk')
+        }
         break
       case 'scheme':
-        this.biwa =  new BiwaScheme.Interpreter(this.onBiwaError)
+        try {
+          this.biwa =  new BiwaScheme.Interpreter(this.onBiwaError)
+        } catch (e) {
+          console.log('failed to setup BiwaScheme')
+        }
         break
       default:
         break
