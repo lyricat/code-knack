@@ -9,6 +9,14 @@ A code evaluator on your web page. Support both client implements and server imp
 - Syntax highlight editor (powered by [CodeMirror](http://codemirror.net/))
 - Multi-languages support (powered by different projects, see table followed)
 
+## TODO
+
+- [ ] script state/network state detection
+- [ ] Java support
+- [ ] Python 3 support
+- [ ] Canvas output
+- [ ] Chart
+
 ## Demo
 
 ![screen record](https://github.com/lyricat/code-knack/blob/master/docs/screenrecord.gif)
