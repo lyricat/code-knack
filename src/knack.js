@@ -302,6 +302,23 @@ function CodeKnack (opts) {
     }
   }
 
+  this.getSource = function (cg) {
+    var sourceArray = []
+    if (this.keepSession) {
+      return cg.codeMirror.getValue()
+    }
+    for (let i = 0; i < this.codeGrounds.length; i++) {
+      const thatCg = this.codeGrounds[i]
+      if (thatCg.lang === cg.lang) {
+        sourceArray.push(thatCg.codeMirror.getValue())
+      }
+      if (thatCg.id === cg.id) {
+        break
+      }
+    }
+    return sourceArray.join('\n')
+  }
+
   this.runCode = function (cg) {
     var output = cg.element.querySelector('.code-knack-output')
     var outputContent = cg.element.querySelector('.code-knack-output-content')
@@ -310,7 +327,7 @@ function CodeKnack (opts) {
       var engine = self.engines[cg.lang]
       if (self.engines.hasOwnProperty(cg.lang)) {
         engine.clear()
-        engine.attachSource(cg.codeMirror.getValue())
+        engine.attachSource(self.getSource(cg))
         self.showMask(cg, {timeout: -1, text: 'Running...'})
         engine.eval().then(function (code) {
           self.hideMask(cg)
@@ -387,7 +404,7 @@ function CodeKnack (opts) {
       }
       // wrap with CodeMirror
       var allGrounds = document.querySelectorAll('.code-knack-playground')
-      allGrounds.forEach(function (ground) {
+      allGrounds.forEach(function (ground, idx) {
         var lang = ground.getAttribute('data-lang')
         var sourceTextarea = ground.querySelector('.code-knack-text')
         var cm = CodeMirror.fromTextArea(sourceTextarea, {
@@ -399,6 +416,7 @@ function CodeKnack (opts) {
           lineNumbers: true
         })
         self.codeGrounds.push({
+          id: 'cg-' + idx,
           element: ground,
           lang: lang,
           codeMirror: cm
@@ -444,6 +462,7 @@ function CodeKnack (opts) {
     var allLangs = this.formalizeLangs(Object.keys(opts.languages))
     this.engines = {}
     this.codeGrounds = []
+    this.session = opts.keepSession ? {} : null
     this.executableLangs = allLangs.filter(function (lang) {
       return opts.languages[lang].mode !== 'view'
     })

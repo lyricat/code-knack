@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack --env=dev --mode=development --progress --profile --colors",
-    "prod": "webpack --env=prod --mode=production --progress --profile --colors"
+    "dev": "webpack --env=dev --mode=development --progress --profile --colors && cp dist/code-knack.min.js docs/demo/",
+    "prod": "webpack --env=prod --mode=production --progress --profile --colors && cp dist/code-knack.min.js docs/demo/"
   },
   "repository": {
     "type": "git",

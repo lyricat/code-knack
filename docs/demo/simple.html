@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet", href="./lib/codemirror/codemirror.css"></link>
+    <link rel="stylesheet", href="./lib/codemirror/theme/monokai.css"></link>
+    <script src="./code-knack.min.js" type="application/javascript"></script>
+    <script src="./lib/codemirror/codemirror.js" type="application/javascript"></script>
+    
+    <title>Code-Knack Demo</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html, body {
+            box-sizing: border-box;
+            background: rgb(244, 246, 247);
+            color: rgb(40, 40, 40);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        a {
+            color:sandybrown;
+        }
+        pre, p {
+            margin: 1em 0;
+        }
+    </style>
+</head>
+<body>
+    <script>
+
+    var getElements = function () {
+        var eles = []
+        document.querySelectorAll('pre').forEach(function (pre) {
+            if (pre.children.length !== 0 && pre.children[0].tagName === 'CODE') {
+                let ele = pre.children[0]
+                if (/language-.+/.test(ele.className)) {
+                    eles.push(ele)
+                }
+            }
+        })
+        console.log(eles)
+        return eles
+    }
+
+    var guessLang = function (ele) {
+        var lang = ele.className.substring(9).toLowerCase()
+        if (lang === 'c') {
+            lang = 'cpp'
+        }
+        console.log('guess lang', lang)
+        return lang
+    }
+    
+    var init = function () {
+        // fetch the languages
+        var langs = Array.prototype.slice.call(document.querySelectorAll('code')).filter(function (x) {
+            return /language-.+/.test(x.className)
+        }).map(function(x) {
+            return x.className.substring(9)
+        })
+        var elements = getElements()
+
+        var codeKnack = new CodeKnack({
+            codeKnackPath: './lib/code-knack',
+            elements: elements,
+            guessLang: guessLang,
+            enabledLanguages: langs,
+            languages: {
+                'javascript': {
+                    mode: 'browser',
+                    scripts: ['./lib/codemirror/mode/javascript/javascript.js'],
+                },
+                'scheme': {
+                    mode: 'browser',
+                    scripts: ['./lib/codemirror/mode/scheme/scheme.js', './lib/engines/biwascheme-min.js'],
+                },
+                'cpp': {
+                    mode: 'browser',
+                    scripts: ['./lib/codemirror/mode/clike/clike.js', './lib/engines/jscpp.es5.min.js'],
+                },
+                'python': {
+                    mode: 'browser',
+                    scripts: ['./lib/codemirror/mode/python/python.js', './lib/engines/skulpt.min.js', './lib/engines/skulpt-stdlib.js'],
+                },
+                'ruby': {
+                    mode: 'browser',
+                    scripts: ['./lib/codemirror/mode/ruby/ruby.js', './lib/engines/opal.js', './lib/engines/opal-parser.js'],
+                },
+                'go': {
+                    mode: 'view',
+                    scripts: ['./lib/codemirror/mode/go/go.js'],
+                },
+                'rust': {
+                    mode: 'view',
+                    scripts: ['./lib/codemirror/addon/mode/simple.js', './lib/codemirror/mode/rust/rust.js'],
+                },
+                'css': {
+                    mode: 'view',
+                    scripts: ['./lib/codemirror/mode/css/css.js'],
+                },
+                'php': {
+                    mode: 'view',
+                    scripts: ['./lib/codemirror/mode/xml/xml.js', './lib/codemirror/mode/php/php.js'],
+                },
+                'html': {
+                    mode: 'view',
+                    scripts: ['./lib/codemirror/mode/xml/xml.js', './lib/codemirror/mode/css/css.js', './lib/codemirror/mode/javascript/javascript.js', './lib/codemirror/mode/htmlmixed/htmlmixed.js'],
+                }
+            }
+        })
+        codeKnack.init()
+    }
+    window[ addEventListener ? 'addEventListener' : 'attachEvent' ]( addEventListener ? 'load' : 'onload', init )
+    </script>
+    <div>
+        <p>C/C++</p>
+        <pre><code class="language-c">
+#include "cstdio"
+int main() {
+    printf("Hello World\n");
+    return 0;
+}
+        </code></pre>
+        <p>Python<p>
+        <pre><code class="language-python">
+def foo():
+    print "Hello"
+
+foo()
+        </code></pre>
+        <p>Javascript<p>
+        <pre><code class="language-javascript">
+console.log('Hello!')
+        </code></pre>
+        <p>Scheme<p>
+        <pre><code class="language-scheme">
+(((lambda (f)
+    ((lambda (proc)
+       (f (lambda (arg) ((proc proc) arg))))
+     (lambda (proc)
+       (f (lambda (arg) ((proc proc) arg))))))
+  (lambda (self)
+    (lambda (ls)
+      (if (null? ls) 0 (+ 1 (self (cdr ls)))))))
+ '(a b c d e))       
+        </code></pre>
+        <pre><code class='language-html'>
+&lt;div class=&quot;abc&quot;&gt;
+    &lt;a href=&quot;https://github.com&quot;&gt;Github&lt;/a&gt;
+&lt;/div&gt;
+        </code></pre>
+    </div>
+</body>
+</html>
