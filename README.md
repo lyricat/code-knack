@@ -28,7 +28,7 @@ Basic Demo:
 
 Integration:
 
-- [Jeklly Demo](https://lyricat.github.io/code-knack-jekyll-demo/jekyll/update/2019/01/19/welcome-to-jekyll.html)
+- [Jekyll Demo](https://lyricat.github.io/code-knack-jekyll-demo/jekyll/update/2019/01/19/welcome-to-jekyll.html)
 - [My Blog (Hexo)](https://lyric.im/code-knack)
 - [GitPress.io](https://gitpress.io/c/12/languages)
 
