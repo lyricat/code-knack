@@ -89,6 +89,10 @@
                     mode: 'browser',
                     scripts: ['./lib/codemirror/mode/python/python.js', './lib/engines/skulpt.min.js', './lib/engines/skulpt-stdlib.js'],
                 },
+                'typescript': {
+                    mode: 'browser',
+                    scripts: ['./lib/codemirror/mode/javascript/javascript.js', './lib/engines/typescriptServices.js'],
+                },
                 'html': {
                     mode: 'view',
                     scripts: ['./lib/codemirror/mode/xml/xml.js', './lib/codemirror/mode/css/css.js', './lib/codemirror/mode/javascript/javascript.js', './lib/codemirror/mode/htmlmixed/htmlmixed.js'],
@@ -130,6 +134,12 @@ console.log('Hello!')
     (lambda (ls)
       (if (null? ls) 0 (+ 1 (self (cdr ls)))))))
  '(a b c d e))       
+        </code></pre>
+        <pre><code class='language-typescript'>
+function Greeter(greeting: string) {
+    return greeting + "!"
+}
+console.log(Greeter("Hi"))
         </code></pre>
         <pre><code class='language-html'>
 &lt;div class=&quot;abc&quot;&gt;

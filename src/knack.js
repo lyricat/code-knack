@@ -1,6 +1,8 @@
 import _ from '../assets/scss/code-knack.scss';
 
-var root = root || window || {}
+let root = typeof self == 'object' && self.self === self && self || 
+typeof global == 'object' && global.global === global && global ||
+this || {};
 
 function builtinRead(x) {
   if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
@@ -74,11 +76,12 @@ function Knack (lang, opts) {
   this.eval = function () {
     var procMap = {
       'javascript': this.evalJS,
+      'typescript': this.evalTypescript,
       'scheme': this.evalScheme,
       'ruby': this.evalRuby,
       'python': this.evalPython,
       'cpp': this.evalCpp,
-      'c': this.evalCpp
+      'c': this.evalCpp,
     }
     var self = this
     var proc = null
@@ -155,6 +158,10 @@ function Knack (lang, opts) {
       return Sk.importMainWithBody("<stdin>", false, source, true)
     })
     return sesPromise
+  }
+  this.evalTypescript = function (source) {
+    var js = ts.transpile(source)
+    return this.evalJS(js)
   }
   this.evalProxy = function (source) {
     var self = this
@@ -291,6 +298,8 @@ function CodeKnack (opts) {
     switch (x) {
       case 'javascript':
         return 'text/javascript'
+      case 'typescript':
+        return 'text/typescript'
       case 'c':
         return 'text/x-csrc'
       case 'cpp':
@@ -493,4 +502,4 @@ if (root) {
   root.CodeKnack = CodeKnack;
 }
 
-export default CodeKnack;
+module.exports = CodeKnack
