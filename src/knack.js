@@ -258,7 +258,7 @@ function CodeKnack (opts) {
     this.log('make UI')
     var self = this
     eles.forEach(function (ele) {
-      var lang = (self.opts.guessLang ? self.opts.guessLang : self.guessLang)(ele)
+      var lang = (self.opts.guessLang ? self.opts.guessLang : self.guessLang).apply(self, [ele])
       var code = ele.innerText
       const html = '<div class="code-knack-playground" data-lang="' + lang + '">'
       + '<div class="code-knack-pane"><div class="code-knack-title">' + lang + '</div>'
