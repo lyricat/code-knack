@@ -93,6 +93,10 @@
                     mode: 'browser',
                     scripts: ['./lib/codemirror/mode/javascript/javascript.js', './lib/engines/typescriptServices.js'],
                 },
+                'sh': {
+                    mode: 'browser',
+                    scripts: ['./lib/codemirror/mode/shell/shell.js'],
+                },
                 'html': {
                     mode: 'view',
                     scripts: ['./lib/codemirror/mode/xml/xml.js', './lib/codemirror/mode/css/css.js', './lib/codemirror/mode/javascript/javascript.js', './lib/codemirror/mode/htmlmixed/htmlmixed.js'],
@@ -145,6 +149,10 @@ console.log(Greeter("Hi"))
 &lt;div class=&quot;abc&quot;&gt;
     &lt;a href=&quot;https://github.com&quot;&gt;Github&lt;/a&gt;
 &lt;/div&gt;
+        </code></pre>
+        <pre><code class='language-bash'>
+#!/usr/bin/env bash
+echo "OK"
         </code></pre>
     </div>
 </body>

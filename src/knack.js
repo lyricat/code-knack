@@ -424,7 +424,7 @@ function CodeKnack (opts) {
       // wrap with CodeMirror
       var allGrounds = document.querySelectorAll('.code-knack-playground')
       allGrounds.forEach(function (ground, idx) {
-        var lang = ground.getAttribute('data-lang')
+        var lang = self.formalizeAlias(ground.getAttribute('data-lang'))
         var sourceTextarea = ground.querySelector('.code-knack-text')
         var cm = CodeMirror.fromTextArea(sourceTextarea, {
           mode: self.getMode(lang),
@@ -457,20 +457,23 @@ function CodeKnack (opts) {
     }, 1000)
   }
 
-  this.guessLang = function (ele) {
-    var lang = ele.className.substring(9).toLowerCase()
-    if (lang === 'c') {
-      lang = 'cpp'
+  this.formalizeAlias = function (lang) {
+    var alias = {
+      'c': 'cpp', 'bash': 'sh'
     }
+    if (alias.hasOwnProperty(lang)) { return alias[lang] }
     return lang
   }
 
+  this.guessLang = function (ele) {
+    var lang = ele.className.substring(9).toLowerCase()
+    return this.formalizeAlias(lang)
+  }
+
   this.formalizeLangs = function (langs) {
+    var self = this
     langs = langs.map(function (item) {
-      if (item === 'c') {
-        item = 'cpp'
-      }
-      return item
+      return self.formalizeAlias(item)
     })
     return langs.filter(function(item, pos) {
       return langs.indexOf(item) === pos
