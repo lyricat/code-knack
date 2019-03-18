@@ -8,7 +8,6 @@ function builtinRead(x) {
   return Sk.builtinFiles["files"][x];
 }
 
-
 function Knack (lang, opts) {
   this.setup = function () {
     var self = this

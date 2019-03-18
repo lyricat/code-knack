@@ -16,7 +16,6 @@ function words(str) {
 }
 
 function CodeKnack (opts) {
-  this.codeKnackPath = '/lib/code-knack'
   this.log = function (str) {
     if (this.opts.debug) {
       let args = [str]
@@ -97,8 +96,8 @@ function CodeKnack (opts) {
       const html = '<div class="code-knack-playground" data-lang="' + lang + '">'
       + '<div class="code-knack-pane"><div class="code-knack-title">' + lang + '</div>'
       + '<div class="code-knack-ctrl">'
-      + (self.isExeutableLang(lang)  ? '<button class="button run-button"><img src="' + self.codeKnackPath + '/images/icon-play.svg"/><span>run</span></button>'  : '')
-      + '<button class="button copy-button"><img src="' + self.codeKnackPath + '/images/icon-copy.svg"/><span>copy</span></button>'
+      + (self.isExeutableLang(lang)  ? '<button class="button run-button"><img src="' + self.opts.codeKnackPath + '/images/icon-play.svg"/><span>run</span></button>'  : '')
+      + '<button class="button copy-button"><img src="' + self.opts.codeKnackPath + '/images/icon-copy.svg"/><span>copy</span></button>'
       + '</div></div>'
       + '<textarea class="code-knack-text lang-' + escape(lang, true) + '">'
       + code
@@ -362,7 +361,6 @@ function CodeKnack (opts) {
       return this.opts.languages[lang].mode  === 'proxy'
     })
     this.langs = this.formalizeLangs(this.opts.enabledLanguages)
-    this.codeKnackPath = this.opts.codeKnackPath || this.codeKnackPath
     // inject engines dependences
     this.inject(this.langs)
     // init
