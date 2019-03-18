@@ -4,6 +4,8 @@ let root = typeof self == 'object' && self.self === self && self ||
 typeof global == 'object' && global.global === global && global ||
 this || {};
 
+var COPY = function (base, extend) { return Object.assign({}, base, extend)}
+
 function builtinRead(x) {
   if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
       throw "File not found: '" + x + "'";
@@ -196,6 +198,7 @@ function CodeKnack (opts) {
     if (this.opts.debug) {
       let args = [str]
       args = args.concat(Array.prototype.slice.call(arguments, 1))
+      args.unshift((new Date()).toISOString())
       console.log.apply(console, args)
     }
   }
@@ -215,9 +218,17 @@ function CodeKnack (opts) {
     langs.forEach(async function (lang) {
       if (self.opts.languages.hasOwnProperty(lang)) {
         var scripts = self.opts.languages[lang].scripts
-        for (let i = 0; i < scripts.length; i++) {
-          const link = scripts[i]          
-          await self.injectScript(link)
+        if (scripts.syntax) {
+          for (let i = 0; i < scripts.syntax.length; i++) {
+            const link = scripts.syntax[i]          
+            await self.injectScript(link)
+          }
+        }
+        if (scripts.engine) {
+          for (let i = 0; i < scripts.engine.length; i++) {
+            const link = scripts.engine[i]          
+            await self.injectScript(link)
+          }
         }
       }
     })
@@ -258,7 +269,7 @@ function CodeKnack (opts) {
     this.log('make UI')
     var self = this
     eles.forEach(function (ele) {
-      var lang = (self.opts.guessLang ? self.opts.guessLang : self.guessLang).apply(self, [ele])
+      var lang = self.opts.guessLang(ele)
       var code = ele.innerText
       const html = '<div class="code-knack-playground" data-lang="' + lang + '">'
       + '<div class="code-knack-pane"><div class="code-knack-title">' + lang + '</div>'
@@ -414,13 +425,10 @@ function CodeKnack (opts) {
     var _proc = function () {
       // init engines
       self.initEngines(self.langs)
+
       // replace with new DOM
-      if (!self.opts.hasOwnProperty('elements')) {
-        var eles = self.getTargetsDOM()
-        self.makeUI(eles)
-      } else {
-        self.makeUI(self.opts.elements)
-      }
+      self.makeUI(self.opts.elements)
+
       // wrap with CodeMirror
       var allGrounds = document.querySelectorAll('.code-knack-playground')
       allGrounds.forEach(function (ground, idx) {
@@ -459,7 +467,9 @@ function CodeKnack (opts) {
 
   this.formalizeAlias = function (lang) {
     var alias = {
-      'c': 'cpp', 'bash': 'sh'
+      'c': 'cpp', 
+      'bash': 'sh', 'shell': 'sh',
+      'ts': 'typescript'
     }
     if (alias.hasOwnProperty(lang)) { return alias[lang] }
     return lang
@@ -480,20 +490,56 @@ function CodeKnack (opts) {
     })
   }
 
+  this.loadLanguageConfig = function (codeMirrorPath, enginePath) {
+    let languages = require('./languages.json')
+    for (const name in languages) {
+      if (languages.hasOwnProperty(name)) {
+        const language = languages[name]
+        if (language.scripts) {
+          if (language.scripts.syntax) {
+            language.scripts.syntax = language.scripts.syntax.map((p) => {
+              return codeMirrorPath + p
+            })
+          }
+          if (language.scripts.engine) {
+            language.scripts.engine = language.scripts.engine.map((p) => {
+              return enginePath + p
+            })
+          }
+          languages[name] = language
+        }
+      }
+    }
+    return languages
+  }
+
+  this.formalizeOptions = function (_opts) {
+    var opts = {}
+    opts.codeKnackPath = _opts.codeKnackPath || './lib/code-knack'
+    opts.codeMirrorPath = _opts.codeMirrorPath || './lib/codemirror'
+    opts.enginePath = _opts.enginePath || './lib/engines'
+    opts.elements = _opts.elements || this.getTargetsDOM()
+    opts.guessLang = _opts.guessLang || this.guessLang
+    opts.enabledLanguages = _opts.enabledLanguages || []
+    opts.debug = _opts.debug,
+    opts.languages = COPY(this.loadLanguageConfig(opts.codeMirrorPath, opts.enginePath), _opts.languages)
+    return opts
+  }
+
   this.init = function () {
-    var allLangs = this.formalizeLangs(Object.keys(opts.languages))
+    this.opts = this.formalizeOptions(opts)
+    var allLangs = this.formalizeLangs(Object.keys(this.opts.languages))
     this.engines = {}
     this.codeGrounds = []
-    this.session = opts.keepSession ? {} : null
-    this.executableLangs = allLangs.filter(function (lang) {
-      return opts.languages[lang].mode !== 'view'
+    this.session = this.opts.keepSession ? {} : null
+    this.executableLangs = allLangs.filter((lang) => {
+      return this.opts.languages[lang].mode !== 'view'
     })
-    this.proxyLangs = this.executableLangs.filter(function (lang) {
-      return opts.languages[lang].mode  === 'proxy'
+    this.proxyLangs = this.executableLangs.filter((lang) => {
+      return this.opts.languages[lang].mode  === 'proxy'
     })
-    this.langs = this.formalizeLangs(opts.enabledLanguages)
-    this.codeKnackPath = opts.codeKnackPath || this.codeKnackPath
-    this.opts = opts
+    this.langs = this.formalizeLangs(this.opts.enabledLanguages)
+    this.codeKnackPath = this.opts.codeKnackPath || this.codeKnackPath
     // inject engines dependences
     this.inject(this.langs)
     // init

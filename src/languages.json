@@ -1,0 +1,64 @@
+{
+  "javascript": {
+    "mode": "browser",
+    "scripts": {
+      "syntax": ["/mode/javascript/javascript.js"]
+    }
+  },
+  "scheme": {
+    "mode": "browser",
+    "scripts": {
+      "syntax": ["/mode/scheme/scheme.js"],
+      "engine": ["/biwascheme-min.js"]
+    }
+  },
+  "cpp": {
+    "mode": "browser",
+    "scripts": {
+      "syntax": ["/mode/clike/clike.js"],
+      "engine": ["/jscpp.es5.min.js"]
+    }
+  },
+  "python": {
+    "mode": "browser",
+    "scripts": {
+      "syntax": ["/mode/python/python.js"],
+      "engine": ["/skulpt.min.js", "/skulpt-stdlib.js"]
+    }
+  },
+  "typescript": {
+    "mode": "browser",
+    "scripts": {
+      "syntax": ["/mode/javascript/javascript.js"],
+      "engine": ["/typescriptServices.js"]
+    }
+  },
+  "ruby": {
+    "mode": "browser",
+    "scripts": {
+      "syntax": ["/mode/ruby/ruby.js"],
+      "engine": ["/opal.js", "/opal-parser.js"]
+    }
+  },  
+  "html": {
+    "mode": "view",
+    "scripts": {
+      "syntax": ["/mode/xml/xml.js", "/mode/css/css.js", "/mode/javascript/javascript.js", "/mode/htmlmixed/htmlmixed.js"]
+    }
+  },
+  "css": { "mode": "view", "scripts": { "syntax": ["/mode/css/css.js"] } },
+  "yaml": { "mode": "view", "scripts": { "syntax": ["/mode/yaml/yaml.js"] } },
+  "xml": { "mode": "view", "scripts": { "syntax": ["/mode/xml/xml.js"] } },
+  "php": { "mode": "view", "scripts": { "syntax": ["/mode/xml/xml.js", "/mode/php/php.js"] } },
+  "shell": { "mode": "view", "scripts": { "syntax": ["/mode/shell/shell.js"] } },
+  "sh": { "mode": "view", "scripts": { "syntax": ["/mode/shell/shell.js"] } },
+  "sql": { "mode": "view", "scripts": { "syntax": ["/mode/sql/sql.js"] } },
+  "lua": { "mode": "view", "scripts": { "syntax": ["/mode/lua/lua.js"] } },
+  "haskell": { "mode": "view", "scripts": { "syntax": ["/mode/haskell/haskell.js"] } },
+  "markdown": { "mode": "view", "scripts": { "syntax": ["/mode/markdown/markdown.js"] } },
+  "groovy": { "mode": "view", "scripts": { "syntax": ["/mode/groovy/groovy.js"] } },
+  "erlang": { "mode": "view", "scripts": { "syntax": ["/mode/erlang/erlang.js"] } },
+  "coffeescript": { "mode": "view", "scripts": { "syntax": ["/mode/coffeescript/coffeescript.js"] } },
+  "beancount": { "mode": "view", "scripts": { "syntax": ["/mode/beancount/beancount.js"] } }
+}
+

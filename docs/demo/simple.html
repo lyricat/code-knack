@@ -73,33 +73,11 @@
             enabledLanguages: langs,
             debug: true,
             languages: {
-                'javascript': {
-                    mode: 'browser',
-                    scripts: ['./lib/codemirror/mode/javascript/javascript.js'],
-                },
-                'scheme': {
-                    mode: 'browser',
-                    scripts: ['./lib/codemirror/mode/scheme/scheme.js', './lib/engines/biwascheme-min.js'],
-                },
-                'cpp': {
-                    mode: 'browser',
-                    scripts: ['./lib/codemirror/mode/clike/clike.js', './lib/engines/jscpp.es5.min.js'],
-                },
-                'python': {
-                    mode: 'browser',
-                    scripts: ['./lib/codemirror/mode/python/python.js', './lib/engines/skulpt.min.js', './lib/engines/skulpt-stdlib.js'],
-                },
-                'typescript': {
-                    mode: 'browser',
-                    scripts: ['./lib/codemirror/mode/javascript/javascript.js', './lib/engines/typescriptServices.js'],
-                },
-                'sh': {
-                    mode: 'browser',
-                    scripts: ['./lib/codemirror/mode/shell/shell.js'],
-                },
-                'html': {
-                    mode: 'view',
-                    scripts: ['./lib/codemirror/mode/xml/xml.js', './lib/codemirror/mode/css/css.js', './lib/codemirror/mode/javascript/javascript.js', './lib/codemirror/mode/htmlmixed/htmlmixed.js'],
+                rust: {
+                    mode: "view",
+                    scripts: {
+                        syntax: ['./lib/codemirror/addon/mode/simple.js', './lib/codemirror/mode/rust/rust.js']
+                    }
                 }
             }
         })
@@ -115,6 +93,15 @@ int main() {
     printf("Hello World\n");
     return 0;
 }
+        </code></pre>
+        <p>Rust</p>
+        <pre><code class="language-rust">
+fn main() {
+    // The statements here will be executed when the compiled binary is called
+
+    // Print text to the console
+    println!("Hello World!");
+}           
         </code></pre>
         <p>Python<p>
         <pre><code class="language-python">
