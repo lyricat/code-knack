@@ -5,7 +5,7 @@ module.exports = {
   entry: [
     'babel-polyfill',
     './assets/scss/code-knack.scss',
-    './src/knack.js',
+    './src/code-knack.js',
   ],
   output: {
     path: path.join(process.cwd(), 'dist'),
