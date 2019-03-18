@@ -13,8 +13,12 @@ function Knack (lang, opts) {
     var self = this
     switch (lang) {
       case 'ruby':
-        Opal.load('opal')
-        Opal.load('opal-parser')
+        if (Opal) {
+          Opal.load('opal')
+          Opal.load('opal-parser')
+        } else {
+          console.log('failed to setup Opal')
+        }
         break
       case 'python':
         try {
