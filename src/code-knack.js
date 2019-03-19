@@ -34,8 +34,11 @@ function CodeKnack (opts) {
     'reinterpret_cast requires static_assert static_cast template this ' +
     'thread_local throw try typeid typename using virtual xor xor_eq'
 
-  this.inject = function (langs) {
+  this.inject = function () {
     this.log('Inject knack dependences.')
+    let langs = this.opts.enabledLanguages.map((x) => {
+      return this.crackLangWithOptions(x).lang
+    })
     const self = this
     langs.forEach(async function (lang) {
       if (self.opts.languages.hasOwnProperty(lang)) {
@@ -79,8 +82,11 @@ function CodeKnack (opts) {
     return {}
   }
 
-  this.initEngines = function (langs) {
+  this.initEngines = function () {
     var self = this
+    let langs = this.opts.enabledLanguages.map((x) => {
+      return this.crackLangWithOptions(x).lang
+    })
     langs.forEach(function (lang) {
       self.engines[lang] = new Knack(lang, self.getLangOpts(lang))
       self.log('init engine', lang)
@@ -91,28 +97,36 @@ function CodeKnack (opts) {
     this.log('make UI')
     var self = this
     eles.forEach(function (ele) {
-      var lang = self.opts.guessLang.apply(self, [ele])
+      var guessRet = self.opts.guessLang.apply(self, [ele])
+      var lang = guessRet.lang
+      var options = guessRet.opts
       var code = ele.innerText
-      const html = '<div class="code-knack-playground" data-lang="' + lang + '">'
-      + '<div class="code-knack-pane"><div class="code-knack-title">' + lang + '</div>'
-      + '<div class="code-knack-ctrl">'
-      + (self.isExeutableLang(lang)  ? '<button class="button run-button"><img src="' + self.opts.codeKnackPath + '/images/icon-play.svg"/><span>run</span></button>'  : '')
-      + '<button class="button copy-button"><img src="' + self.opts.codeKnackPath + '/images/icon-copy.svg"/><span>copy</span></button>'
-      + '</div></div>'
-      + '<textarea class="code-knack-text lang-' + escape(lang, true) + '">'
-      + code
-      + '</textarea>'
-      + '<div class="code-knack-output"><div class="code-knack-output-title">Output</div><div class="code-knack-output-content"></div></div>'
-      + '<div class="code-knack-footer"></div>'
-      + '<div class="code-knack-mask"></div>'
-      + '</div>'
+      let html = '<div class="code-knack-playground" data-lang="' + lang + '" data-options="' + options +'">'
+        + '<div class="code-knack-pane"><div class="code-knack-title">' + lang + '</div>'
+        + '<div class="code-knack-ctrl">'
+        + (self.isExeutableLang(lang)  ? '<button class="button run-button"><img src="' + self.opts.codeKnackPath + '/images/icon-play.svg"/><span>run</span></button>'  : '')
+        + '<button class="button copy-button"><img src="' + self.opts.codeKnackPath + '/images/icon-copy.svg"/><span>copy</span></button>'
+        + '</div></div>'
+        + '<textarea class="code-knack-text lang-' + escape(lang, true) + '">'
+        + code
+        + '</textarea>'
+      if (lang !== 'mermaid') {
+        html = html
+          + '<div class="code-knack-output text-output"><div class="code-knack-output-title">Output</div><div class="code-knack-output-content"></div></div>'
+      } else {
+        html = html
+          + '<div class="code-knack-output html-output"><div class="code-knack-output-title">Output</div><div class="code-knack-output-content" id="graphDiv"></div></div>'
+      }
+      html += '<div class="code-knack-footer"></div>'
+        + '<div class="code-knack-mask"></div>'
+        + '</div>'
       var parent = ele.parentNode
       parent.innerHTML = html
     })
   }
 
   this.isExeutableLang = function (lang) {
-    return this.executableLangs.indexOf(lang) !== -1
+    return this.opts.languages[lang].mode !== 'view'
   }
 
   this.getTargetsDOM = function () {
@@ -143,12 +157,16 @@ function CodeKnack (opts) {
         return 'text/css'
       case 'scss':
         return 'text/scss'
-      case 'html':
+        case 'html':
         return {
           name: "htmlmixed",
           scriptTypes: [{matches: /\/x-handlebars-template|\/x-mustache/i,
-                         mode: null}]
-        }
+            mode: null}]
+          }
+      /* workaround modes*/
+      case 'mermaid':
+        return 'text/x-erlang'
+      /* using text/x-??? by default */
       default:
         return 'text/x-' + x
     }
@@ -183,7 +201,12 @@ function CodeKnack (opts) {
         self.showMask(cg, {timeout: -1, text: 'Running...'})
         engine.eval().then(function (code) {
           self.hideMask(cg)
-          outputContent.innerText = engine.getResult()
+          var output = engine.getResult()
+          if (self.opts.languages[cg.lang].output === 'html') {
+            outputContent.innerHTML = output
+          } else {
+            outputContent.innerText = output
+          }
         }).catch(function (err) {
           self.hideMask(cg)
           outputContent.innerText = err
@@ -246,7 +269,7 @@ function CodeKnack (opts) {
     var self = this
     var _proc = function () {
       // init engines
-      self.initEngines(self.langs)
+      self.initEngines()
 
       // replace with new DOM
       self.makeUI(self.opts.elements)
@@ -255,6 +278,7 @@ function CodeKnack (opts) {
       var allGrounds = document.querySelectorAll('.code-knack-playground')
       allGrounds.forEach(function (ground, idx) {
         var lang = self.formalizeAlias(ground.getAttribute('data-lang'))
+        var options = ground.getAttribute('data-options')
         var sourceTextarea = ground.querySelector('.code-knack-text')
         var cm = CodeMirror.fromTextArea(sourceTextarea, {
           mode: self.getMode(lang),
@@ -270,12 +294,18 @@ function CodeKnack (opts) {
           lang: lang,
           codeMirror: cm
         })
+        // bind events
         var lastCodeGround = self.codeGrounds[self.codeGrounds.length - 1]
         var runButton = ground.querySelector('.run-button')
+        var runFn = self.runCode(lastCodeGround)
         if (runButton) {
-          runButton.onclick = self.runCode(lastCodeGround)
+          runButton.onclick = runFn
         }
         ground.querySelector('.copy-button').onclick = self.copyCode(lastCodeGround)
+        // auto run?
+        if (options.indexOf('autorun') !== -1) {
+          runFn.apply(self, [])
+        }
       })
     }
     setTimeout(function () {
@@ -298,8 +328,22 @@ function CodeKnack (opts) {
   }
 
   this.guessLang = function (ele) {
+    /* 
+      element with class="language-{language name and options}" 
+    */
     var lang = ele.className.substring(9).toLowerCase()
-    return this.formalizeAlias(lang)
+    return lang
+  }
+
+  this.crackLangWithOptions = function (langWithOpts) {
+    let opts = ''
+    let lang = langWithOpts
+    let pos = langWithOpts.indexOf(',')
+    if (pos !== -1) {
+      lang = langWithOpts.slice(0, pos)
+      opts = langWithOpts.slice(pos + 1)
+    }
+    return {lang: this.formalizeAlias(lang), opts: opts}
   }
 
   this.formalizeLangs = function (langs) {
@@ -341,7 +385,9 @@ function CodeKnack (opts) {
     opts.codeMirrorPath = _opts.codeMirrorPath || './lib/codemirror'
     opts.enginePath = _opts.enginePath || './lib/engines'
     opts.elements = _opts.elements || this.getTargetsDOM()
-    opts.guessLang = _opts.guessLang || this.guessLang
+    opts.guessLang = (ele) => { 
+      return this.crackLangWithOptions((_opts.guessLang || this.guessLang)(ele))
+    }
     opts.enabledLanguages = _opts.enabledLanguages || []
     opts.debug = _opts.debug,
     opts.languages = COPY(this.loadLanguageConfig(opts.codeMirrorPath, opts.enginePath), _opts.languages)
@@ -350,19 +396,12 @@ function CodeKnack (opts) {
 
   this.init = function () {
     this.opts = this.formalizeOptions(opts)
-    var allLangs = this.formalizeLangs(Object.keys(this.opts.languages))
     this.engines = {}
     this.codeGrounds = []
     this.session = this.opts.keepSession ? {} : null
-    this.executableLangs = allLangs.filter((lang) => {
-      return this.opts.languages[lang].mode !== 'view'
-    })
-    this.proxyLangs = this.executableLangs.filter((lang) => {
-      return this.opts.languages[lang].mode  === 'proxy'
-    })
     this.langs = this.formalizeLangs(this.opts.enabledLanguages)
     // inject engines dependences
-    this.inject(this.langs)
+    this.inject()
     // init
     this.tryToInit()
   }

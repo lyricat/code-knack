@@ -76,6 +76,7 @@ function Knack (lang, opts) {
       'python': this.evalPython,
       'cpp': this.evalCpp,
       'c': this.evalCpp,
+      'mermaid': this.evalMermaid,
     }
     var self = this
     var proc = null
@@ -156,6 +157,15 @@ function Knack (lang, opts) {
   this.evalTypescript = function (source) {
     var js = ts.transpile(source)
     return this.evalJS(js)
+  }
+  this.evalMermaid = function (source) {
+    mermaid.initialize({theme: 'neutral'})
+    var promise = new Promise(function (resolve, reject) {
+      mermaid.render(`mermaid-${Date.now()}`, source, function(svgCode, bindFunctions){
+        resolve(svgCode)
+      })
+    })
+    return promise
   }
   this.evalProxy = function (source) {
     var self = this

@@ -73,29 +73,30 @@
             </ul>
         </div>
         <div class="ctrl">
-            <a class="ctrl-btn active" href="#" onclick="switchDemo(this, 'simple')">Simple Demo</a>
-            <a class="ctrl-btn" href="#" onclick="switchDemo(this, 'session')">Keep Session Demo</a>
+            <a class="ctrl-btn active simple" href="#" onclick="switchDemo(this, 'simple')">Simple Demo</a>
+            <a class="ctrl-btn session" href="#" onclick="switchDemo(this, 'session')">Keep Session Demo</a>
+            <a class="ctrl-btn diagrams" href="#" onclick="switchDemo(this, 'diagrams')">Diagrams Demo</a>
         </div>
         <div class="wrapper">
         <iframe id="iframe" src="simple.html" onload="resizeIframe(this)"></iframe>
         </div>
     </div>
     <script>
-        function switchDemo(obj, name) {
-            var iframe = document.getElementById('iframe')
-            var btns = document.querySelectorAll('.ctrl-btn')
-            btns.forEach(function (btn) {
-                if (btn.classList.contains('active')) {
-                    btn.classList.remove('active')
-                } else {
-                    btn.classList.add('active')
-                }
-            })
-            iframe.src = name + '.html'
-        }
-        function resizeIframe(obj) {
-            obj.style.height = obj.contentWindow.document.body.scrollHeight * 2 + 'px';
-        }
+      function switchDemo(obj, name) {
+        var iframe = document.getElementById('iframe')
+        var btns = document.querySelectorAll('.ctrl-btn')
+        btns.forEach(function (btn) {
+            if (btn.classList.contains(name)) {
+                btn.classList.add('active')
+            } else {
+                btn.classList.remove('active')
+            }
+        })
+        iframe.src = name + '.html'
+      }
+      function resizeIframe(obj) {
+        obj.style.height = obj.contentWindow.document.body.scrollHeight * 10 + 'px';
+      }
     </script>
 </body>
 </html>

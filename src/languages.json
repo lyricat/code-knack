@@ -39,7 +39,15 @@
       "syntax": ["/mode/ruby/ruby.js"],
       "engine": ["/opal.js", "/opal-parser.js"]
     }
-  },  
+  },
+  "mermaid": {
+    "mode": "browser",
+    "scripts": {
+      "syntax": ["/mode/erlang/erlang.js"],
+      "engine": ["/mermaid.min.js"]
+    },
+    "output": "html"
+  },
   "html": {
     "mode": "view",
     "scripts": {
