@@ -15,6 +15,16 @@ function words(str) {
   return obj
 }
 
+function removeDups(names) {
+  let unique = {};
+  names.forEach(function(i) {
+    if(!unique[i]) {
+      unique[i] = true;
+    }
+  });
+  return Object.keys(unique);
+}
+
 function CodeKnack (opts) {
   this.log = function (str) {
     if (this.opts.debug) {
@@ -39,6 +49,9 @@ function CodeKnack (opts) {
     let langs = this.opts.enabledLanguages.map((x) => {
       return this.crackLangWithOptions(x).lang
     })
+    // remove duplicates
+    langs = removeDups(langs)
+
     const self = this
     langs.forEach(async function (lang) {
       if (self.opts.languages.hasOwnProperty(lang)) {
@@ -174,7 +187,7 @@ function CodeKnack (opts) {
 
   this.getSource = function (cg) {
     var sourceArray = []
-    if (this.keepSession) {
+    if (!this.opts.keepSession) {
       return cg.codeMirror.getValue()
     }
     for (let i = 0; i < this.codeGrounds.length; i++) {
@@ -304,7 +317,9 @@ function CodeKnack (opts) {
         ground.querySelector('.copy-button').onclick = self.copyCode(lastCodeGround)
         // auto run?
         if (options.indexOf('autorun') !== -1) {
-          runFn.apply(self, [])
+          setTimeout(function () {
+            runFn.apply(self, [])
+          }, 1000)
         }
       })
     }
@@ -385,6 +400,7 @@ function CodeKnack (opts) {
     opts.codeMirrorPath = _opts.codeMirrorPath || './lib/codemirror'
     opts.enginePath = _opts.enginePath || './lib/engines'
     opts.elements = _opts.elements || this.getTargetsDOM()
+    opts.keepSession = _opts.keepSession === true ? true : false
     opts.guessLang = (ele) => { 
       return this.crackLangWithOptions((_opts.guessLang || this.guessLang)(ele))
     }
@@ -399,7 +415,6 @@ function CodeKnack (opts) {
     this.engines = {}
     this.codeGrounds = []
     this.session = this.opts.keepSession ? {} : null
-    this.langs = this.formalizeLangs(this.opts.enabledLanguages)
     // inject engines dependences
     this.inject()
     // init

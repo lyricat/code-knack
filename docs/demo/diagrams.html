@@ -64,7 +64,7 @@
 
     var codeKnack = new CodeKnack({
       codeKnackPath: './lib/code-knack',
-      keepSession: true,
+      keepSession: false,
       elements: elements,
       guessLang: guessLang,
       enabledLanguages: langs,
@@ -82,6 +82,14 @@ graph TD
   C -->|One1| D[Laptop]
   C -->|Two| E[iPhone]
   C -->|Two| E[iPhone]
+  C -->|Two| E[iPhone]
+  C -->|Three| F[fa:fa-car Car]
+    </code></pre>
+    <pre><code class="language-mermaid,autorun">
+graph TD
+  A[Christmas] -->|Get money| B(Go shopping)
+  B --> C{Let me think}
+  C -->|One1| D[Laptop]
   C -->|Two| E[iPhone]
   C -->|Three| F[fa:fa-car Car]
     </code></pre>

@@ -160,8 +160,8 @@ function Knack (lang, opts) {
   }
   this.evalMermaid = function (source) {
     mermaid.initialize({theme: 'neutral'})
-    var promise = new Promise(function (resolve, reject) {
-      mermaid.render(`mermaid-${Date.now()}`, source, function(svgCode, bindFunctions){
+    let promise = new Promise(function (resolve, reject) {
+      mermaid.render(`mermaid-${Date.now() + (Math.random() * 10  << 20)}`, source, function(svgCode, bindFunctions){
         resolve(svgCode)
       })
     })
