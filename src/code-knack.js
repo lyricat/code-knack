@@ -74,18 +74,24 @@ function CodeKnack (opts) {
     this.log('Knack Loaded.')
   }
   
-  this.injectScript = function (link, callback) {
+  this.injectScript = function async (link, callback) {
     var self = this
-    var script = document.createElement('script')
-    script.setAttribute('src', link)
-    script.setAttribute('type', 'text/javascript')
-    document.body.appendChild(script)
-    return new Promise(function (resolve, reject) {
-      script.onload = function () {
-        self.log('inject script', link)
+    if (null === document.querySelector('script[src="./lib/engines/mermaid.min.js"]')) {
+      var script = document.createElement('script')
+      script.setAttribute('src', link)
+      script.setAttribute('type', 'text/javascript')
+      document.body.appendChild(script)
+      return new Promise(function (resolve, reject) {
+        script.onload = function () {
+          self.log('inject script', link)
+          resolve()
+        }
+      })
+    } else {
+      return new Promise(function (resolve, reject) {
         resolve()
-      }
-    })
+      })
+    }
   }
 
   this.getLangOpts = function (lang) {
