@@ -67,6 +67,7 @@
   "groovy": { "mode": "view", "scripts": { "syntax": ["/mode/groovy/groovy.js"] } },
   "erlang": { "mode": "view", "scripts": { "syntax": ["/mode/erlang/erlang.js"] } },
   "coffeescript": { "mode": "view", "scripts": { "syntax": ["/mode/coffeescript/coffeescript.js"] } },
+  "java": { "mode": "view", "scripts": { "syntax": ["/mode/clike/clike.js"] } },
   "beancount": { "mode": "view", "scripts": { "syntax": ["/mode/beancount/beancount.js"] } }
 }
 

@@ -170,6 +170,8 @@ function CodeKnack (opts) {
         return 'text/x-csrc'
       case 'cpp':
         return 'text/x-c++src'
+      case 'java':
+        return 'text/x-java'
       case 'rust':
         return 'text/x-rustsrc'
       case 'css':
@@ -281,7 +283,7 @@ function CodeKnack (opts) {
   }
 
   this.isClike = function (lang) {
-    return lang === 'c' || lang === 'cpp'
+    return lang === 'c' || lang === 'cpp' || lang === 'java'
   }
 
   this.tryToInit = function () {
