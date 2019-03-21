@@ -145,7 +145,10 @@ function CodeKnack (opts) {
   }
 
   this.isExeutableLang = function (lang) {
-    return this.opts.languages[lang].mode !== 'view'
+    if (this.opts.languages.hasOwnProperty(lang)) {
+      return this.opts.languages[lang].mode !== 'view'
+    }
+    return false
   }
 
   this.getTargetsDOM = function () {
