@@ -363,7 +363,7 @@ function CodeKnack (opts) {
 
   this.crackLangWithOptions = function (langWithOpts) {
     let opts = ''
-    let lang = langWithOpts
+    let lang = langWithOpts.toLowerCase()
     let pos = langWithOpts.indexOf(',')
     if (pos !== -1) {
       lang = langWithOpts.slice(0, pos)
