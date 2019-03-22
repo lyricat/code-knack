@@ -48,6 +48,11 @@
     },
     "output": "html"
   },
+  "latex": {
+    "mode": "browser",
+    "scripts": { "syntax": ["/mode/stex/stex.js"], "engine": ["/katex/katex.min.js", "/katex/katex.min.css"] },
+    "output": "html"
+  },
   "html": {
     "mode": "view",
     "scripts": {

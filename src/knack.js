@@ -77,6 +77,7 @@ function Knack (lang, opts) {
       'cpp': this.evalCpp,
       'c': this.evalCpp,
       'mermaid': this.evalMermaid,
+      'latex': this.evalLaTeX,
     }
     var self = this
     var proc = null
@@ -164,6 +165,13 @@ function Knack (lang, opts) {
       mermaid.render(`mermaid-${Date.now() + (Math.random() * 10  << 20)}`, source, function(svgCode, bindFunctions){
         resolve(svgCode)
       })
+    })
+    return promise
+  }
+  this.evalLaTeX = function (source) {
+    let promise = new Promise(function (resolve, reject) {
+      let html = katex.renderToString(source, { throwOnError: true })
+      resolve(html)
     })
     return promise
   }

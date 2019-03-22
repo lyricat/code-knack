@@ -18,7 +18,6 @@
             flex: 1;
             padding-left: 20px;
             color: white;
-            text-transform: uppercase;
             display: flex;
             font-size: 14px;
             font-family: 'MavenPro-Bold', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, 'Helvetica Neue', sans-serif;
@@ -103,8 +102,13 @@
             max-width: 100% !important;
             background: rgba(252, 253, 255, 1);
             margin: 0 10px;
+            color: #000;
+            font-size: 18px;
             border-radius: 3px;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+        }
+        .code-knack-output-content .katex .base {
+            margin: 10px 0;
         }
     }
     .code-knack-footer {

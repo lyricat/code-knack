@@ -32,42 +32,12 @@
   </style>
 </head>
 <body>
-  <script>
-
-  var getElements = function () {
-    var eles = []
-    document.querySelectorAll('pre').forEach(function (pre) {
-      if (pre.children.length !== 0 && pre.children[0].tagName === 'CODE') {
-        let ele = pre.children[0]
-        if (/language-.+/.test(ele.className)) {
-          eles.push(ele)
-        }
-      }
-    })
-    console.log(eles)
-    return eles
-  }
-
-  var guessLang = function (ele) {
-    var lang = ele.className.substring(9).toLowerCase()
-    return lang
-  }
-  
+  <script>  
   var init = function () {
-    // fetch the languages
-    var langs = Array.prototype.slice.call(document.querySelectorAll('code')).filter(function (x) {
-      return /language-.+/.test(x.className)
-    }).map(function(x) {
-      return x.className.substring(9)
-    })
-    var elements = getElements()
-
     var codeKnack = new CodeKnack({
       codeKnackPath: './lib/code-knack',
       keepSession: false,
-      elements: elements,
-      guessLang: guessLang,
-      enabledLanguages: langs,
+      enabledLanguages: ['latex'],
       debug: true,
     })
     codeKnack.init()
@@ -75,23 +45,16 @@
   window[ addEventListener ? 'addEventListener' : 'attachEvent' ]( addEventListener ? 'load' : 'onload', init )
   </script>
   <div>
-    <pre><code class="language-mermaid,autorun">
-graph TD
-  A[Christmas] -->|Get money| B(Go shopping)
-  B --> C{Let me think}
-  C -->|One1| D[Laptop]
-  C -->|Two| E[iPhone]
-  C -->|Two| E[iPhone]
-  C -->|Two| E[iPhone]
-  C -->|Three| F[fa:fa-car Car]
+    <pre><code class="language-latex,autorun">
+c = \pm \sqrt{a^2 + b^2}
     </code></pre>
-    <pre><code class="language-mermaid,autorun">
-graph TD
-  A[Christmas] -->|Get money| B(Go shopping)
-  B --> C{Let me think}
-  C -->|One1| D[Laptop]
-  C -->|Two| E[iPhone]
-  C -->|Three| F[fa:fa-car Car]
+    <pre><code class="language-latex,autorun">
+f(x) = \int_{-\infty}^\infty
+    \hat f(\xi)e^{2 \pi i \xi x}
+    \,d\xi
+\\
+\\
+x = {-b \pm \sqrt{b^2-4ac} \over 2a}
     </code></pre>
   </div>
 </body>

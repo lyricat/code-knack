@@ -76,14 +76,24 @@ function CodeKnack (opts) {
   
   this.injectScript = function async (link, callback) {
     var self = this
-    if (null === document.querySelector('script[src="./lib/engines/mermaid.min.js"]')) {
-      var script = document.createElement('script')
-      script.setAttribute('src', link)
-      script.setAttribute('type', 'text/javascript')
-      document.body.appendChild(script)
+    let tag = 'script'
+    if (link.slice(link.length - 4) === '.css') {
+      tag = 'link'
+    }
+    if (null === document.querySelector('script[src="' + link + '"]')) {
+      var script = document.createElement(tag)
+      if (tag === 'script') {
+        script.setAttribute('src', link)
+        script.setAttribute('type', 'text/javascript')
+        document.body.appendChild(script)
+      } else {
+        script.setAttribute('href', link)
+        script.setAttribute('rel', 'stylesheet')
+        document.head.appendChild(script)
+      }
       return new Promise(function (resolve, reject) {
         script.onload = function () {
-          self.log('inject script', link)
+          self.log(`inject <${tag}>`, link)
           resolve()
         }
       })
@@ -114,14 +124,17 @@ function CodeKnack (opts) {
 
   this.makeUI = function (eles) {
     this.log('make UI')
-    var self = this
+    let self = this
+    const renderTitle = (x) => {
+      return x === 'latex' ? 'LaTeX' : x.toUpperCase()
+    } 
     eles.forEach(function (ele) {
       var guessRet = self.opts.guessLang.apply(self, [ele])
       var lang = guessRet.lang
       var options = guessRet.opts
       var code = ele.innerText
-      let html = '<div class="code-knack-playground" data-lang="' + lang + '" data-options="' + options +'">'
-        + '<div class="code-knack-pane"><div class="code-knack-title">' + lang + '</div>'
+      let output = '<div class="code-knack-playground" data-lang="' + lang + '" data-options="' + options +'">'
+        + '<div class="code-knack-pane"><div class="code-knack-title">' + renderTitle(lang) + '</div>'
         + '<div class="code-knack-ctrl">'
         + (self.isExeutableLang(lang)  ? '<button class="button run-button"><img src="' + self.opts.codeKnackPath + '/images/icon-play.svg"/><span>run</span></button>'  : '')
         + '<button class="button copy-button"><img src="' + self.opts.codeKnackPath + '/images/icon-copy.svg"/><span>copy</span></button>'
@@ -129,18 +142,18 @@ function CodeKnack (opts) {
         + '<textarea class="code-knack-text lang-' + escape(lang, true) + '">'
         + code
         + '</textarea>'
-      if (lang !== 'mermaid') {
-        html = html
-          + '<div class="code-knack-output text-output"><div class="code-knack-output-title">Output</div><div class="code-knack-output-content"></div></div>'
+      if (self.getLangOpts(lang).output === 'html') {
+        output = output
+          + '<div class="code-knack-output html-output"><div class="code-knack-output-title">Output</div><div class="code-knack-output-content"></div></div>'
       } else {
-        html = html
-          + '<div class="code-knack-output html-output"><div class="code-knack-output-title">Output</div><div class="code-knack-output-content" id="graphDiv"></div></div>'
+        output = output
+          + '<div class="code-knack-output text-output"><div class="code-knack-output-title">Output</div><div class="code-knack-output-content"></div></div>'
       }
-      html += '<div class="code-knack-footer"></div>'
+      output += '<div class="code-knack-footer"></div>'
         + '<div class="code-knack-mask"></div>'
         + '</div>'
       var parent = ele.parentNode
-      parent.innerHTML = html
+      parent.innerHTML = output
     })
   }
 
@@ -190,6 +203,8 @@ function CodeKnack (opts) {
       /* workaround modes*/
       case 'mermaid':
         return 'text/x-erlang'
+      case 'latex':
+        return 'text/x-stex'
       /* using text/x-??? by default */
       default:
         return 'text/x-' + x
@@ -226,7 +241,8 @@ function CodeKnack (opts) {
         engine.eval().then(function (code) {
           self.hideMask(cg)
           var output = engine.getResult()
-          if (self.opts.languages[cg.lang].output === 'html') {
+          let langOpts = self.getLangOpts(cg.lang)
+          if (langOpts.output === 'html') {
             outputContent.innerHTML = output
           } else {
             outputContent.innerText = output
@@ -327,7 +343,7 @@ function CodeKnack (opts) {
         }
         ground.querySelector('.copy-button').onclick = self.copyCode(lastCodeGround)
         // auto run?
-        if (options.indexOf('autorun') !== -1) {
+        if (runButton && options.indexOf('autorun') !== -1) {
           setTimeout(function () {
             runFn.apply(self, [])
           }, 1000)
