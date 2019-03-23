@@ -170,8 +170,15 @@ function Knack (lang, opts) {
   }
   this.evalLaTeX = function (source) {
     let promise = new Promise(function (resolve, reject) {
-      let html = katex.renderToString(source, { throwOnError: true })
-      resolve(html)
+      let html = ''
+      try {
+        html = katex.renderToString(source, { throwOnError: true })
+        resolve(html)
+      } catch (e) {
+        html = ("Error in LaTeX '" + source + "': " + e.message)
+          .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        resolve(html)
+      }
     })
     return promise
   }
