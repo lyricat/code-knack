@@ -154,6 +154,7 @@ function CodeKnack (opts) {
         + '</div>'
       var parent = ele.parentNode
       parent.innerHTML = output
+      parent.style.padding = 0
     })
   }
 
