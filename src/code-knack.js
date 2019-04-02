@@ -25,6 +25,31 @@ function removeDups(names) {
   return Object.keys(unique);
 }
 
+function buildTheme(name) {
+  if (name === 'light') {
+    return {
+      '--bg': '#f4f4f4',
+      '--text': '#333',
+      '--border': 'rgba(0,0,0,0.1)',
+      '--code': '#333',
+      '--code-bg': '#fff',
+      '--title': '#888',
+      '--button-text': '#d4941d',
+      '--button-border': 'rgba(0,0,0,0)'
+    }
+  }
+  return {
+    '--bg': 'rgb(58, 54, 54)',
+    '--text': 'rgb(255, 255, 255)',
+    '--border': 'rgba(0,0,0,0.3)',
+    '--code': 'rgb(255, 255, 255)',
+    '--code-bg': 'rgba(39, 40, 35, 1)',
+    '--title': 'rgb(255, 255, 255)',
+    '--button-text': 'wheat',
+    '--button-border': 'rgba(0,0,0,0.18)'
+  }
+}
+
 function CodeKnack (opts) {
   this.log = function (str) {
     if (this.opts.debug) {
@@ -122,7 +147,7 @@ function CodeKnack (opts) {
     })
   }
 
-  this.makeUI = function (eles) {
+  this.makeUI = function (eles, theme) {
     this.log('make UI')
     let self = this
     const renderTitle = (x) => {
@@ -133,11 +158,11 @@ function CodeKnack (opts) {
       var lang = guessRet.lang
       var options = guessRet.opts
       var code = ele.innerText
-      let output = '<div class="code-knack-playground" data-lang="' + lang + '" data-options="' + options +'">'
+      let output = '<div class="code-knack-playground ' + (self.opts.lineNumbers ? 'line-number' : '') + '" data-lang="' + lang + '" data-options="' + options +'">'
         + '<div class="code-knack-pane"><div class="code-knack-title">' + renderTitle(lang) + '</div>'
         + '<div class="code-knack-ctrl">'
-        + (self.isExeutableLang(lang)  ? '<button class="button run-button"><img src="' + self.opts.codeKnackPath + '/images/icon-play.svg"/><span>run</span></button>'  : '')
-        + '<button class="button copy-button"><img src="' + self.opts.codeKnackPath + '/images/icon-copy.svg"/><span>copy</span></button>'
+        + (self.isExeutableLang(lang)  ? '<button class="ck-button run-button"><img src="' + self.opts.codeKnackPath + '/images/icon-play-' + self.opts.theme + '.svg"/><span>run</span></button>'  : '')
+        + '<button class="ck-button copy-button"><img src="' + self.opts.codeKnackPath + '/images/icon-copy-' + self.opts.theme + '.svg"/><span>copy</span></button>'
         + '</div></div>'
         + '<textarea class="code-knack-text lang-' + escape(lang, true) + '">'
         + code
@@ -152,9 +177,19 @@ function CodeKnack (opts) {
       output += '<div class="code-knack-footer"></div>'
         + '<div class="code-knack-mask"></div>'
         + '</div>'
+        
       var parent = ele.parentNode
       parent.innerHTML = output
       parent.style.padding = 0
+      // theme
+      if (theme) {
+        let themeConfig = buildTheme(theme)
+        for (const key in themeConfig) {
+          if (themeConfig.hasOwnProperty(key)) {
+            parent.style.setProperty(key, themeConfig[key])
+          }
+        }
+      }
     })
   }
 
@@ -313,7 +348,7 @@ function CodeKnack (opts) {
       self.initEngines()
 
       // replace with new DOM
-      self.makeUI(self.opts.elements)
+      self.makeUI(self.opts.elements, self.opts.theme)
 
       // wrap with CodeMirror
       var allGrounds = document.querySelectorAll('.code-knack-playground')
@@ -323,11 +358,11 @@ function CodeKnack (opts) {
         var sourceTextarea = ground.querySelector('.code-knack-text')
         var cm = CodeMirror.fromTextArea(sourceTextarea, {
           mode: self.getMode(lang),
-          theme: 'monokai',
+          theme: self.opts.theme === 'light' ? 'base16-light' : 'monokai',
           useCPP: self.isClike(lang),
           keywords: self.isClike(lang) ? words(self.cppKeywords) : {},
           cursorHeight: 1,
-          lineNumbers: true
+          lineNumbers: self.opts.lineNumbers,
         })
         self.codeGrounds.push({
           id: 'cg-' + idx,
@@ -427,7 +462,9 @@ function CodeKnack (opts) {
     opts.codeKnackPath = _opts.codeKnackPath || './lib/code-knack'
     opts.codeMirrorPath = _opts.codeMirrorPath || './lib/codemirror'
     opts.enginePath = _opts.enginePath || './lib/engines'
+    opts.theme = _opts.theme || 'dark',
     opts.elements = _opts.elements || this.getTargetsDOM()
+    opts.lineNumbers = _opts.lineNumbers === false ? false : true
     opts.keepSession = _opts.keepSession === true ? true : false
     opts.guessLang = (ele) => { 
       return this.crackLangWithOptions((_opts.guessLang || this.guessLang)(ele))

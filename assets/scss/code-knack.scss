@@ -1,132 +1,146 @@
 
 .code-knack-playground {
-    position: relative;
-    background: rgb(58, 54, 54);
+  position: relative;
+  background-color: rgb(58, 54, 54);
+  background-color: var(--bg, rgb(58, 54, 54));
+  border-radius: 3px;
+  border: 1px solid var(--border, rgba(0,0,0,0.1));
+  &.line-number {
+    .CodeMirror {
+      padding-left: 0px;
+    }
+  }
+  img {
+    max-width: 90% !important;
+    display: inline-block !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+  .code-knack-pane {
+    height: 40px;
+    display: flex;
     border-radius: 3px;
-    img {
-        max-width: 90% !important;
-        display: inline-block !important;
-        border-radius: 0 !important;
-        box-shadow: none !important;
+    .code-knack-title {
+      flex: 1;
+      padding-left: 20px;
+      color: var(--title, rgb(255, 255, 255));
+      display: flex;
+      font-size: 14px;
+      font-family: 'MavenPro-Bold', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, 'Helvetica Neue', sans-serif;
+      align-items: center;
+      opacity: 0.5;
     }
-    .code-knack-pane {
-        height: 40px;
-        display: flex;
-        border-radius: 3px;
-        box-shadow: inset 0 -0.5px 0px 0px #000;
-        .code-knack-title {
-            flex: 1;
-            padding-left: 20px;
-            color: white;
-            display: flex;
-            font-size: 14px;
-            font-family: 'MavenPro-Bold', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, 'Helvetica Neue', sans-serif;
-            align-items: center;
-            opacity: 0.5;
-        }
-        .code-knack-ctrl {
-            flex: 1;
-            display: flex;
-            justify-content: flex-end;
-        }
-        button {
-            height: 40px;
-            padding: 0 16px;
-            font-size: 14px;
-            background: transparent;
-            border: none;
-            color: wheat;
-            opacity: 0.8;
-            outline: none;
-            display: flex;
-            align-items: center;
-            box-shadow: -1px 0 0 0 rgba(0, 0, 0, 0.5), inset 1px 0 0 0 rgba(255, 255, 255, 0.14);
-            img {
-                height: 14px;
-                margin-right: 3px;
-            }
-        }
-        button:hover {
-            opacity: 1;
-        }
-        button:active {
-            opacity: 0.6;
-        }
+    .code-knack-ctrl {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
     }
+    button.ck-button {
+      height: 40px;
+      padding: 0 16px;
+      font-size: 14px;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      color: var(--button-text, wheat);
+      opacity: 0.8;
+      outline: none;
+      display: flex;
+      align-items: center;
+      box-shadow: -1px 0 0 0 var(--button-border, rgba(0,0,0,0.5));
+      img {
+        height: 14px;
+        margin-right: 3px;
+      }
+    }
+    button.ck-button:hover {
+      opacity: 1;
+    }
+    button.ck-button:active {
+      opacity: 0.6;
+    }
+  }
+  pre {
+    background: transparent;
+    color: var(--code, white);
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+  }
+  .CodeMirror {
+    padding-left: 16px;
+  }
+  .CodeMirror, .code-knack-text {
+    font-size: 14px;
+    line-height: 18px;
+    height: auto;
     pre {
-        background: transparent;
-        color: white;
-        border-bottom-left-radius: 3px;
-        border-bottom-right-radius: 3px;
+      padding: 0 4px;
+      font-family: 'Menlo', 'Roboto Mono', 'Courier New', Courier, monospace !important;
     }
-    .CodeMirror, .code-knack-text {
-        font-size: 14px;
-        line-height: 18px;
-        height: auto;
-        box-shadow: 0 0.5px 0px 0px #000;
-        pre {
-            padding: 0 4px;
-            font-family: 'Menlo', 'Roboto Mono', 'Courier New', Courier, monospace !important;
-        }
+  }
+  .code-knack-text {
+    color: var(--code, white);
+    border: none;
+    width: 100%;
+    height: 100%;
+    background: var(--code-bg, rgba(39, 40, 35, 1));
+    font-family: 'Menlo', 'Roboto Mono', 'Courier New', Courier, monospace !important;
+  }
+  .code-knack-output {
+    display: none;
+    background: var(--bg, rgb(58, 54, 54));
+    font-family: 'Menlo', 'Roboto Mono', 'Courier New', Courier, monospace !important;
+    border-top: 1px solid var(--border, rgba(0, 0, 0, 0.1));    
+    .code-knack-output-title {
+      color: var(--text, white);
+      opacity: 0.6;
+      font-size: 12px;
+      margin: 0 10px 0 20px;
+      padding: 4px 0;
+      font-family: "MavenPro-Medium" -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, 'Helvetica Neue', sans-serif;
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+      border-bottom-color: rgba(255, 255, 255, 0.06);
     }
-    .code-knack-text {
-        color: white;
-        border: none;
-        width: 100%;
-        height: 100%;
-        background: rgba(39, 40, 35, 1);
-        font-family: 'Menlo', 'Roboto Mono', 'Courier New', Courier, monospace !important;
+    .code-knack-output-content {
+      color: var(--text, white);
+      white-space: pre-line;
+      padding: 8px 12px 8px 20px;
+      font-size: 14px;
+      overflow: auto;
     }
-    .code-knack-output {
-        display: none;
-        background: rgb(58, 54, 54);
-        font-family: 'Menlo', 'Roboto Mono', 'Courier New', Courier, monospace !important;
-        .code-knack-output-title {
-            color: rgb(167, 167, 167);
-            font-size: 12px;
-            margin: 0 10px 0 20px;
-            padding: 4px 0;
-            font-family: "MavenPro-Medium" -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, 'Helvetica Neue', sans-serif;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        }
-        .code-knack-output-content {
-            color: rgb(255, 255, 255);
-            white-space: pre-line;
-            padding: 8px 12px 8px 20px;
-            font-size: 14px;
-            overflow: auto;
-        }
+  }
+  .code-knack-output.html-output {
+    .code-knack-output-content {
+      max-width: 100% !important;
+      background: rgba(252, 253, 255, 1);
+      margin: 0 10px;
+      color: #000;
+      border-radius: 3px;
+      border: 1px solid var(--border, rgba(0,0,0,0.1));
     }
-    .code-knack-output.html-output {
-        .code-knack-output-content {
-            max-width: 100% !important;
-            background: rgba(252, 253, 255, 1);
-            margin: 0 10px;
-            color: #000;
-            border-radius: 3px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
-        }
-        .code-knack-output-content .katex .base {
-            margin: 10px 0;
-        }
+    .code-knack-output-content .katex .base {
+      margin: 10px 0;
     }
-    .code-knack-footer {
-        background: rgb(58, 54, 54);
-        height: 10px;
-        border-bottom-left-radius: 3px;
-        border-bottom-right-radius: 3px;
-    }
-    .code-knack-mask {
-        display: none;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        color: white;
-        z-index: 10;
-        align-items: center;
-        justify-content: center;
-        background: rgba(0,0,0,0.4);
-    }
+  }
+  .code-knack-footer {
+    background-color: rgb(58, 54, 54);
+    background-color: var(--bg, rgb(58, 54, 54));
+    height: 10px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+  }
+  .code-knack-mask {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    color: white;
+    z-index: 10;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.4);
+  }
 }

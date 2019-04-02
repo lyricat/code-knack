@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet", href="./lib/codemirror/codemirror.css"></link>
     <link rel="stylesheet", href="./lib/codemirror/theme/monokai.css"></link>
+    <link rel="stylesheet", href="./lib/codemirror/theme/base16-light.css"></link>
     <script src="./code-knack.min.js" type="application/javascript"></script>
     <script src="./lib/codemirror/codemirror.js" type="application/javascript"></script>
     
@@ -22,6 +23,9 @@
             background: rgb(244, 246, 247);
             color: rgb(40, 40, 40);
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        body {
+            padding: 10px;
         }
         a {
             color:sandybrown;
@@ -72,14 +76,8 @@
             guessLang: guessLang,
             enabledLanguages: langs,
             debug: true,
-            languages: {
-                rust: {
-                    mode: "view",
-                    scripts: {
-                        syntax: ['./lib/codemirror/addon/mode/simple.js', './lib/codemirror/mode/rust/rust.js']
-                    }
-                }
-            }
+            theme: 'light',
+            lineNumbers: false,
         })
         codeKnack.init()
     }

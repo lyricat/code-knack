@@ -73,6 +73,7 @@
   "erlang": { "mode": "view", "scripts": { "syntax": ["/mode/erlang/erlang.js"] } },
   "coffeescript": { "mode": "view", "scripts": { "syntax": ["/mode/coffeescript/coffeescript.js"] } },
   "java": { "mode": "view", "scripts": { "syntax": ["/mode/clike/clike.js"] } },
-  "beancount": { "mode": "view", "scripts": { "syntax": ["/mode/beancount/beancount.js"] } }
+  "beancount": { "mode": "view", "scripts": { "syntax": ["/mode/beancount/beancount.js"] } },
+  "rust": { "mode": "view", "scripts": { "syntax": ["./lib/codemirror/addon/mode/simple.js", "./lib/codemirror/mode/rust/rust.js"] } }
 }
 
