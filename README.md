@@ -62,6 +62,8 @@ if you use the default output of [marked](https://marked.js.org), you don't need
     elements: elements,                 // an array contains elements with code
     guessLang: guessLang,               // a function to guess language in each element
     enabledLanguages: langs,            // enabled language array
+    theme: 'dark',                      // dark theme
+    lineNumbers: true,                  // enabled line numbers
     languages: {                        // language config, if you want to add language support manually
       ...
     }
@@ -84,6 +86,8 @@ WIP
 | elements         | Optional  | all elements `pre > code`                         | an array contains DOM elements                                         |
 | guessLang        | Optional  | elements with class="language-{name and options}" | a function to guess language for each element                          |
 | keepSession      | Optional  | false                                             | if true, all codeblocks in same page will be considered in one session |
+| theme            | Optional  | 'dark'                                            | dark or light theme                                                    |
+| lineNumbers      | Optional  | true                                              | toggle line number                                                     |
 | languages        | Optional  | -                                                 | see followed                                                           |
 
 ### CodeKnack Language Config
