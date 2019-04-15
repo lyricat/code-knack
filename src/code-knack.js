@@ -172,7 +172,7 @@ function CodeKnack (opts) {
           + '<div class="code-knack-output html-output"><div class="code-knack-output-title">Output</div><div class="code-knack-output-content"></div></div>'
       } else {
         output = output
-          + '<div class="code-knack-output text-output"><div class="code-knack-output-title">Output</div><div class="code-knack-output-content"></div></div>'
+          + '<div class="code-knack-output text-output"><div class="code-knack-output-title">Output</div><pre class="code-knack-output-content"></pre></div>'
       }
       output += '<div class="code-knack-footer"></div>'
         + '<div class="code-knack-mask"></div>'

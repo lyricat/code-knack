@@ -19,11 +19,18 @@
       "engine": ["/jscpp.es5.min.js"]
     }
   },
-  "python": {
+  "python2": {
     "mode": "browser",
     "scripts": {
       "syntax": ["/mode/python/python.js"],
       "engine": ["/skulpt.min.js", "/skulpt-stdlib.js"]
+    }
+  },
+  "python": {
+    "mode": "browser",
+    "scripts": {
+      "syntax": ["/mode/python/python.js"],
+      "engine": ["/brython.js", "/brython_stdlib.js"]
     }
   },
   "typescript": {

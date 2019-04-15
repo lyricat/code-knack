@@ -2,28 +2,48 @@ let root = typeof self == 'object' && self.self === self && self ||
 typeof global == 'object' && global.global === global && global ||
 this || {};
 
+
 function builtinRead(x) {
   if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
       throw "File not found: '" + x + "'";
   return Sk.builtinFiles["files"][x];
 }
 
+function initBrython() {
+  brython({debug: 1, indexedDB: false})
+}
+
 function Knack (lang, opts) {
   this.setup = function () {
     var self = this
+    this.consoleBuffer = ''
+    this.lang = lang
+    this.source = ''
+    this.opts = opts
+
+    if (root.KnackSetupMap.hasOwnProperty(lang) && root.KnackSetupMap[lang]) {
+      // already setup
+      return
+    }
     switch (lang) {
       case 'ruby':
         if (Opal) {
           Opal.load('opal')
           Opal.load('opal-parser')
+          root.KnackSetupMap[lang] = true
         } else {
           console.log('failed to setup Opal')
         }
         break
       case 'python':
+        initBrython()
+        root.KnackSetupMap[lang] = true
+        break
+      case 'python2':
         try {
           this.Sk = Sk
           this.Sk.configure({output: function (text) { self.onSkOutput(text) }, read: builtinRead})
+          root.KnackSetupMap[lang] = true
         } catch (e) {
           console.log('failed to setup Sk')
         }
@@ -31,6 +51,7 @@ function Knack (lang, opts) {
       case 'scheme':
         try {
           this.biwa =  new BiwaScheme.Interpreter(this.onBiwaError)
+          root.KnackSetupMap[lang] = true
         } catch (e) {
           console.log('failed to setup BiwaScheme')
         }
@@ -38,10 +59,6 @@ function Knack (lang, opts) {
       default:
         break
     }
-    this.consoleBuffer = ''
-    this.lang = lang
-    this.source = ''
-    this.opts = opts
   }
   this.clear = function () {
     this.source = ''
@@ -54,8 +71,11 @@ function Knack (lang, opts) {
     console._log = console.log
     var self = this
     console.log = function (value) {
-      // a workaround for Opal
-      self.consoleBuffer += value + (self.lang === 'ruby' ? '' : '\n')
+      self.consoleBuffer += value
+      // a workaround for Opal and Brython
+      if (self.lang !== 'ruby' && self.lang !== 'python') {
+        self.consoleBuffer += '\n'
+      }
     }
   }
   this.unhookConsole = function () {
@@ -73,6 +93,7 @@ function Knack (lang, opts) {
       'typescript': this.evalTypescript,
       'scheme': this.evalScheme,
       'ruby': this.evalRuby,
+      'python2': this.evalPython2,
       'python': this.evalPython,
       'cpp': this.evalCpp,
       'c': this.evalCpp,
@@ -99,6 +120,7 @@ function Knack (lang, opts) {
     return new Promise(function (resolve, reject) {
       promise.then(function (ret) {
         self.unhookConsole()
+        console._log(ret, self.consoleBuffer)
         if (self.consoleBuffer.length === 0) {
           if (ret.constructor === Object && ret.toString) {
             self.consoleBuffer += ret.toString()
@@ -149,11 +171,22 @@ function Knack (lang, opts) {
     })
     return promise
   }
-  this.evalPython = function (source) {
+  this.evalPython2 = function (source) {
     var sesPromise = Sk.misceval.asyncToPromise(function() {
       return Sk.importMainWithBody("<stdin>", false, source, true)
     })
     return sesPromise
+  }
+  this.evalPython = function (source) {
+    var promise = new Promise(function (resolve, reject) {
+      try {
+        var ret = __BRYTHON__.run_script(source, '', true)
+        resolve(ret || '')
+      } catch (e) {
+        resolve(e.toString())
+      }
+    })
+    return promise
   }
   this.evalTypescript = function (source) {
     var js = ts.transpile(source)
@@ -211,6 +244,7 @@ function Knack (lang, opts) {
 
 if (root) {
   root.Knack = Knack;
+  root.KnackSetupMap = {};
 }
 
 module.exports = Knack
