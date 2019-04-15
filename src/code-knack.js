@@ -161,7 +161,7 @@ function CodeKnack (opts) {
       let output = '<div class="code-knack-playground ' + (self.opts.lineNumbers ? 'line-number' : '') + '" data-lang="' + lang + '" data-options="' + options +'">'
         + '<div class="code-knack-pane"><div class="code-knack-title">' + renderTitle(lang) + '</div>'
         + '<div class="code-knack-ctrl">'
-        + (self.isExeutableLang(lang)  ? '<button class="ck-button run-button"><img src="' + self.opts.codeKnackPath + '/images/icon-play-' + self.opts.theme + '.svg"/><span>run</span></button>'  : '')
+        + (self.isExeutableLang(lang) && options.indexOf('ignore') === -1 ? '<button class="ck-button run-button"><img src="' + self.opts.codeKnackPath + '/images/icon-play-' + self.opts.theme + '.svg"/><span>run</span></button>'  : '')
         + '<button class="ck-button copy-button"><img src="' + self.opts.codeKnackPath + '/images/icon-copy-' + self.opts.theme + '.svg"/><span>copy</span></button>'
         + '</div></div>'
         + '<textarea class="code-knack-text lang-' + escape(lang, true) + '">'
@@ -462,7 +462,7 @@ function CodeKnack (opts) {
     opts.codeKnackPath = _opts.codeKnackPath || './lib/code-knack'
     opts.codeMirrorPath = _opts.codeMirrorPath || './lib/codemirror'
     opts.enginePath = _opts.enginePath || './lib/engines'
-    opts.theme = _opts.theme || 'dark',
+    opts.theme = _opts.theme || 'dark'
     opts.elements = _opts.elements || this.getTargetsDOM()
     opts.lineNumbers = _opts.lineNumbers === false ? false : true
     opts.keepSession = _opts.keepSession === true ? true : false
@@ -470,7 +470,7 @@ function CodeKnack (opts) {
       return this.crackLangWithOptions((_opts.guessLang || this.guessLang)(ele))
     }
     opts.enabledLanguages = _opts.enabledLanguages || []
-    opts.debug = _opts.debug,
+    opts.debug = _opts.debug
     opts.languages = COPY(this.loadLanguageConfig(opts.codeMirrorPath, opts.enginePath), _opts.languages)
     return opts
   }
