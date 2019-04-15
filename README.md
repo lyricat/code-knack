@@ -14,8 +14,8 @@ A code evaluator on your web page. Support both client implements and server imp
 - [x] Java support
 - [x] Diagram output
 - [x] LaTeX output
+- [X] Python 3 support
 - [ ] script state/network state detection
-- [ ] Python 3 support
 - [ ] Chart
 
 ## Demo
