@@ -81,6 +81,7 @@
   "coffeescript": { "mode": "view", "scripts": { "syntax": ["/mode/coffeescript/coffeescript.js"] } },
   "java": { "mode": "view", "scripts": { "syntax": ["/mode/clike/clike.js"] } },
   "beancount": { "mode": "view", "scripts": { "syntax": ["/mode/beancount/beancount.js"] } },
-  "rust": { "mode": "view", "scripts": { "syntax": ["./lib/codemirror/addon/mode/simple.js", "./lib/codemirror/mode/rust/rust.js"] } }
+  "rust": { "mode": "view", "scripts": { "syntax": ["/addon/mode/simple.js", "/mode/rust/rust.js"] } },
+  "r": { "mode": "view", "scripts": { "syntax": ["/addon/mode/simple.js", "/mode/r/r.js"] } }
 }
 

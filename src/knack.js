@@ -1,12 +1,12 @@
-let root = typeof self == 'object' && self.self === self && self || 
+let root = typeof self == 'object' && self.self === self && self ||
 typeof global == 'object' && global.global === global && global ||
 this || {};
 
-
 function builtinRead(x) {
-  if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
-      throw "File not found: '" + x + "'";
-  return Sk.builtinFiles["files"][x];
+  if (Sk.builtinFiles === undefined || Sk.builtinFiles['files'][x] === undefined) {
+    throw `File not found: ${x}`
+  }
+  return Sk.builtinFiles['files'][x]
 }
 
 function initBrython() {
@@ -111,13 +111,13 @@ function Knack (lang, opts) {
       proc = self.evalProxy
     } else {
       // unsupported and not proxied
-      return new Promise(function (resolve, reject) {
+      return new Promise(function (resolve) {
         self.unhookConsole()
         resolve(self.consoleBuffer)
       })
     }
     var promise = proc.apply(this, [this.source])
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve) {
       promise.then(function (ret) {
         self.unhookConsole()
         console._log(ret, self.consoleBuffer)
@@ -142,14 +142,14 @@ function Knack (lang, opts) {
         write: function (s) { self.consoleBuffer += s }
       }
     }
-    var promise = new Promise(function (resolve, reject) {
-      var ret = JSCPP.run(source, "", config)
+    var promise = new Promise(function (resolve) {
+      var ret = JSCPP.run(source, '', config)
       resolve(ret)
     })
     return promise
   }
   this.evalJS = function (source) {
-    var promise = new Promise(function (resolve, reject) {
+    var promise = new Promise(function (resolve) {
       var ret = eval(source)
       resolve(ret)
     })
@@ -157,14 +157,14 @@ function Knack (lang, opts) {
   }
   this.evalScheme = function (source) {
     var self = this
-    var promise = new Promise(function (resolve, reject) {
+    var promise = new Promise(function (resolve) {
       var ret = self.biwa.evaluate(source)
       resolve(ret)
     })
     return promise
   }
   this.evalRuby = function (source) {
-    var promise = new Promise(function (resolve, reject) {
+    var promise = new Promise(function (resolve) {
       var js = Opal.compile(source)
       var ret = eval(js)
       resolve(ret)
@@ -173,12 +173,12 @@ function Knack (lang, opts) {
   }
   this.evalPython2 = function (source) {
     var sesPromise = Sk.misceval.asyncToPromise(function() {
-      return Sk.importMainWithBody("<stdin>", false, source, true)
+      return Sk.importMainWithBody('<stdin>', false, source, true)
     })
     return sesPromise
   }
   this.evalPython = function (source) {
-    var promise = new Promise(function (resolve, reject) {
+    var promise = new Promise(function (resolve) {
       try {
         var ret = __BRYTHON__.run_script(source, '', true)
         resolve(ret || '')
@@ -194,7 +194,7 @@ function Knack (lang, opts) {
   }
   this.evalMermaid = function (source) {
     mermaid.initialize({theme: 'neutral'})
-    let promise = new Promise(function (resolve, reject) {
+    let promise = new Promise(function (resolve) {
       mermaid.render(`mermaid-${Date.now() + (Math.random() * 10  << 20)}`, source, function(svgCode, bindFunctions){
         resolve(svgCode)
       })
@@ -202,14 +202,14 @@ function Knack (lang, opts) {
     return promise
   }
   this.evalLaTeX = function (source) {
-    let promise = new Promise(function (resolve, reject) {
+    let promise = new Promise(function (resolve) {
       let html = ''
       try {
         html = katex.renderToString(source, { throwOnError: true })
         resolve(html)
       } catch (e) {
-        html = ("Error in LaTeX '" + source + "': " + e.message)
-          .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        html = (`Error in LaTeX ${source} : ${e.message}`)
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
         resolve(html)
       }
     })

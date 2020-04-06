@@ -3,7 +3,7 @@
   position: relative;
   background-color: rgb(58, 54, 54);
   background-color: var(--bg, rgb(58, 54, 54));
-  border-radius: 3px;
+  border-radius: 10px;
   border: 1px solid var(--border, rgba(0,0,0,0.1));
   &.line-number {
     .CodeMirror {
@@ -90,7 +90,7 @@
     display: none;
     background: var(--bg, rgb(58, 54, 54));
     font-family: 'Menlo', 'Roboto Mono', 'Courier New', Courier, monospace !important;
-    border-top: 1px solid var(--border, rgba(0, 0, 0, 0.1));    
+    border-top: 1px solid var(--border, rgba(0, 0, 0, 0.1));
     .code-knack-output-title {
       color: var(--text, white);
       opacity: 0.6;
@@ -128,8 +128,8 @@
     background-color: rgb(58, 54, 54);
     background-color: var(--bg, rgb(58, 54, 54));
     height: 10px;
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
   }
   .code-knack-mask {
     display: none;

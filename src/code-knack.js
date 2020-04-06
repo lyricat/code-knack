@@ -1,7 +1,7 @@
 import _ from '../assets/scss/code-knack.scss';
 import Knack from './knack'
 
-let root = typeof self == 'object' && self.self === self && self || 
+let root = typeof self == 'object' && self.self === self && self ||
 typeof global == 'object' && global.global === global && global ||
 this || {};
 
@@ -83,13 +83,13 @@ function CodeKnack (opts) {
         var scripts = self.opts.languages[lang].scripts
         if (scripts.syntax) {
           for (let i = 0; i < scripts.syntax.length; i++) {
-            const link = scripts.syntax[i]          
+            const link = scripts.syntax[i]
             await self.injectScript(link)
           }
         }
         if (scripts.engine) {
           for (let i = 0; i < scripts.engine.length; i++) {
-            const link = scripts.engine[i]          
+            const link = scripts.engine[i]
             await self.injectScript(link)
           }
         }
@@ -98,7 +98,7 @@ function CodeKnack (opts) {
     root.KnackLoaded = true
     this.log('Knack Loaded.')
   }
-  
+
   this.injectScript = function async (link, callback) {
     var self = this
     let tag = 'script'
@@ -152,7 +152,7 @@ function CodeKnack (opts) {
     let self = this
     const renderTitle = (x) => {
       return x === 'latex' ? 'LaTeX' : x.toUpperCase()
-    } 
+    }
     eles.forEach(function (ele) {
       var guessRet = self.opts.guessLang.apply(self, [ele])
       var lang = guessRet.lang
@@ -177,7 +177,7 @@ function CodeKnack (opts) {
       output += '<div class="code-knack-footer"></div>'
         + '<div class="code-knack-mask"></div>'
         + '</div>'
-        
+
       var parent = ele.parentNode
       parent.innerHTML = output
       parent.style.padding = 0
@@ -211,7 +211,7 @@ function CodeKnack (opts) {
     })
     return eles
   }
-  
+
   this.getMode = function (x) {
     switch (x) {
       case 'javascript':
@@ -226,6 +226,8 @@ function CodeKnack (opts) {
         return 'text/x-java'
       case 'rust':
         return 'text/x-rustsrc'
+      case 'r':
+        return 'text/x-rsrc'
       case 'css':
         return 'text/css'
       case 'scss':
@@ -397,7 +399,7 @@ function CodeKnack (opts) {
 
   this.formalizeAlias = function (lang) {
     var alias = {
-      'c': 'cpp', 
+      'c': 'cpp',
       'bash': 'sh', 'shell': 'sh',
       'ts': 'typescript'
     }
@@ -406,8 +408,8 @@ function CodeKnack (opts) {
   }
 
   this.guessLang = function (ele) {
-    /* 
-      element with class="language-{language name and options}" 
+    /*
+      element with class="language-{language name and options}"
     */
     var lang = ele.className.substring(9).toLowerCase()
     return lang
@@ -466,7 +468,7 @@ function CodeKnack (opts) {
     opts.elements = _opts.elements || this.getTargetsDOM()
     opts.lineNumbers = _opts.lineNumbers === false ? false : true
     opts.keepSession = _opts.keepSession === true ? true : false
-    opts.guessLang = (ele) => { 
+    opts.guessLang = (ele) => {
       return this.crackLangWithOptions((_opts.guessLang || this.guessLang)(ele))
     }
     opts.enabledLanguages = _opts.enabledLanguages || []

@@ -9,7 +9,7 @@
     <link rel="stylesheet", href="./lib/codemirror/theme/base16-light.css"></link>
     <script src="./code-knack.min.js" type="application/javascript"></script>
     <script src="./lib/codemirror/codemirror.js" type="application/javascript"></script>
-    
+
     <title>Code-Knack Demo</title>
 
     <style>
@@ -60,7 +60,7 @@
         console.log('guess lang', lang)
         return lang
     }
-    
+
     var init = function () {
         // fetch the languages
         var langs = Array.prototype.slice.call(document.querySelectorAll('code')).filter(function (x) {
@@ -76,7 +76,7 @@
             guessLang: guessLang,
             enabledLanguages: langs,
             debug: true,
-            theme: 'light',
+            theme: 'dark',
             lineNumbers: false,
         })
         codeKnack.init()
@@ -99,7 +99,7 @@ fn main() {
 
     // Print text to the console
     println!("Hello World!");
-}           
+}
         </code></pre>
         <p>Python<p>
         <pre><code class="language-python">
@@ -122,7 +122,7 @@ console.log('Hello!')
   (lambda (self)
     (lambda (ls)
       (if (null? ls) 0 (+ 1 (self (cdr ls)))))))
- '(a b c d e))       
+ '(a b c d e))
         </code></pre>
         <pre><code class='language-typescript'>
 function Greeter(greeting: string) {
@@ -135,9 +135,10 @@ console.log(Greeter("Hi"))
     &lt;a href=&quot;https://github.com&quot;&gt;Github&lt;/a&gt;
 &lt;/div&gt;
         </code></pre>
-        <pre><code class='language-bash'>
-#!/usr/bin/env bash
-echo "OK"
+        <pre><code class='language-r'>
+cat("Printing objects: "); print(X)
+print("Accessing individual elements:")
+cat(sprintf("Your height is %s and your weight is %s\n", X$height, X$weight))
         </code></pre>
     </div>
 </body>
